@@ -13,7 +13,7 @@ Now, if you want to force some S/M ship to bail, you need to:
  - Keep their hull as low as possible, without killing them.
  - Harass them, using any of the following methods:
     - Repeatedly demand them to `Surrender!`. (As effective as shooting them)
-    - Shoot them without killing them (`Ion weapons` are the best, since they preserve hull).
+    - Shoot them without killing them (`Ion weapons` are the best since they preserve hull).
  - Once they all bail, use a marine to claim the ship, they have been trained to be as careful as you are, so they will not harm the ship any longer.
 
 ## Detailed changes explanation
@@ -27,7 +27,7 @@ A good pilot (High morale) will be able to keep the crew together, but even the 
 
 The worse the hull state is, the less the pilot morale is factored in.
 
-### Bailing check frecuency will increase the worse the hull state is
+### Bailing check frequency will increase the worse the hull state is
 By default, crew members were only allowed to bail every 30 seconds, but if the ship is falling apart under enemy fire, they will speed up the evacuation process.
 
 Hull degradation will speed this up to every 5s at 1% hull.

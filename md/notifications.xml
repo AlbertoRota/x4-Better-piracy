@@ -1,36 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
 <diff>
-	<!-- Remove the ship size penalty from bail chance calculation -->
 	<!-- This selector matches line 940 -->
 	<replace sel="(//cue[@name='PlayerOwnedShipAttacks']//set_value[@name='$ejectchance'])[1]">
+		<!-- Remove the ship size penalty from bail chance calculation -->
 		<set_value
 			name="$ejectchance"
 			exact="( (46 - $target.combinedskill / 5) * [(($attacker.shieldpercentage + $attacker.hullpercentage) / [($target.shieldpercentage + $target.hullpercentage), 1.0].max), 1.0].min )i"
 		/>
 	</replace>
 	
-	<!-- Critical hull state (lower that 20%) will encourage bailing even if pilot morale is perfect -->
 	<!-- This selector matches line 954 -->
 	<replace sel="//do_else/set_value[@name='$numcrewbailing']">
+		<!-- The worse the hull state is, the less the pilot morale is factored in -->
 		<set_value
 			name="$numcrewbailing"
-			exact="[[[($target.people.capacity * [((15 - $target.pilot.skill.morale)f / 15.0), (20 - [$target.hullpercentage, 20.0]min)f / 20]max)i, $target.people.count].min, 1].max, 3].min"
+			exact="[[[($target.people.capacity * ((15 - ($target.pilot.skill.morale * ([$target.hullpercentage, 75].min / 75))i)f / 15.0))i, $target.people.count].min, 1].max, 3].min"
 		/>
+		
+		<!-- If someone is bailing, provide feedback to the player -->
+		<do_if value="$attacker == @player.occupiedship">
+			<show_notification 
+				text="'%s crew member/s bailed out of:\n %s %s'.[$numcrewbailing, $target.idcode, $target.knownname]"
+				timeout="5s"
+				sound="notification_generic"
+			/>
+		</do_if>
 	</replace>
 	
-	<!-- If someone is bailing, provide feedback to the player -->
-	<!-- This selector matches line 957 -->
-	<add sel="//do_if[@value='($numcrewbailing ge $target.people.count) and not $target.iscapitalship']" pos="before">
-		<set_value name="$Speak_Line" exact="10030" />
-	</add>
-	
-	<!-- Critical hull state (lower that 20%) will increase bailing frecuency -->
 	<!-- This selector matches line 971 -->
 	<replace sel="//do_if[@value='not @$pilotbail']/set_value[@name='$target.pilot.$nextcapturechance']">
+		<!-- Bailing check frecuency is increased the worse the hull state is -->
 		<set_value
 			name="$target.pilot.$nextcapturechance"
-			exact="player.age + (5 + (15.0 * ([$target.hullpercentage, 20]min)f / 20.0)i  )s"
+			exact="player.age + (5 + (15 * ([$target.hullpercentage, 75].min / 75))i)s"
 		/>
+		
+		<!-- Debug lines, make sure that they are commented out before pushing to GitHub -->
+		<!--
+		<set_value name="$secondstoadd" exact="(5 + (15 * ([$target.hullpercentage, 75].min / 75))i)s"/>
+		<show_notification 
+			text="'Crew bailing: %s - Next roll in: %s seconds'.[$numcrewbailing, $secondstoadd]"
+			timeout="5s"
+			sound="notification_generic"
+		/>
+		-->
 	</replace>
 </diff>
 

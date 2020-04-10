@@ -4,7 +4,7 @@
 	name="Better piracy"
 	description="Improves piracy gameplay in X4 by"
 	author="Alberto Rota"
-	version="0.0.0"
+	version="0.1.0"
 	date="2020-04-08"
 	save="0"
 	enabled="1"

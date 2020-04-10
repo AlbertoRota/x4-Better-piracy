@@ -45,5 +45,11 @@
 		/>
 		-->
 	</replace>
+	
+	<!-- This selector matches line 1012 -->
+	<add sel="//eject_npcs" pos="before">
+		<!-- Reputation hit for doing piracy -->
+		<signal_cue_instantly cue="PlayerBoarding" param="[$target, 'boarding started']" />
+	</add>
 </diff>
 

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<diff>
+	<!-- Remove all the hull and component damage caused by "Marine claiming" -->
+	<!-- This selector matches lines 106 and 207 -->
+	<remove sel="/aiscript/attention[@min='unknown']/actions/do_if[4]/do_if[1]"/>
+	<remove sel="/aiscript/attention[@min='visible']/actions/do_if[5]/do_if[1]"/>
+</diff>

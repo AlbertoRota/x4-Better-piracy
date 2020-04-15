@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<mdscript name="betterpiracy_harass" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" >
+
+<cues>
+
+  <!-- Text storage cue -->
+  <cue name="Text"/>
+  <library name="Load_Text">
+    <actions>
+      <set_value
+        name="Text.$HarassCommand"
+        exact="{61537, 5100}"
+        comment="Text shown in the interaction menu for the `Harass` command."
+      />
+    </actions>
+  </library>
+
+  <!-- Listen from the menu api reloading. -->
+  <cue name="Reset_On_Reload" instantiate="true">
+    <conditions>
+      <event_cue_signalled cue="md.Interact_Menu_API.Reloaded"/>
+    </conditions>
+    <actions>
+      <include_actions ref="Load_Text"/>
+
+      <signal_cue_instantly
+        cue="md.Interact_Menu_API.Register_Action"
+        param = "table[
+          $id         = 'betterpiracy_harass',
+          $section    = 'interaction',
+          $name       = Text.$HarassCommand,
+          $callback   = Harass_Init,
+          $enabled_conditions  = ['player_is_piloting'],
+          $disabled_conditions = ['~show_PlayerInteractions'],
+          ]"
+      />
+      <debug_text text="'Better piracy: Registered custom `Harass` command as :' + Text.$HarassCommand"/>
+    </actions>
+  </cue>
+
+  <cue name="Harass_Init" instantiate="true" namespace="this">
+    <conditions>
+      <event_cue_signalled/>
+    </conditions>
+    <actions>
+      <set_value name="$target" exact="event.param.$object"/>
+      <set_value name="$CurrentPhase" exact="null"/>
+
+      <set_value name="$MissionStep_DamageShields" exact="1"/>
+      <set_value name="$MissionStep_DamageHull"    exact="2"/>
+      <set_value name="$MissionStep_WaitBailing"   exact="3"/>
+      <set_value name="$MissionStep_ForceBailing"  exact="4"/>
+      <set_value name="$MissionStep_ClaimShip"     exact="5"/>
+
+      <signal_cue_instantly cue="Harass_ChangePhase" param="[this, 'createMission']"/>
+    </actions>
+    <cues>
+      <cue name="Harass_Init_KeepAlive" instantiate="true" checkinterval="10s"/>
+    </cues>
+  </cue>
+
+  <cue name="Harass_ChangePhase" instantiate="true">
+    <conditions>
+      <event_cue_signalled/>
+    </conditions>
+    <actions>
+      <set_value name="$oCue" exact="event.param.{1}"/>
+
+      <set_value name="$CurrentPhase" exact="$oCue.$CurrentPhase"/>
+      <set_value name="$TargetPhase" exact="event.param.{2}"/>
+
+      <debug_text text="player.age + ' Harass operation ' + $oCue + ' Changing phase from ' + $CurrentPhase + ' to ' + $TargetPhase"/>
+      <do_if value="$CurrentPhase">
+        <debug_text text="player.age + ' Harass operation ' + $oCue + ' Stopping harass cue ' + $CurrentPhase"/>
+        <cancel_cue cue="$CurrentPhase"/>
+        <set_value name="$oCue.$CurrentPhase" exact="null"/>
+      </do_if>
+
+      <do_if value="$TargetPhase == 'createMission'">
+        <signal_cue_instantly cue="Harass_CreateMission" param="[$oCue]"/>
+      </do_if>
+      <do_elseif value="$TargetPhase == 'damageShields'">
+        <signal_cue_instantly cue="Harass_DamageShields" param="[$oCue]"/>
+      </do_elseif>
+      <do_elseif value="$TargetPhase == 'damageHull'">
+        <signal_cue_instantly cue="Harass_DamageHull" param="[$oCue]"/>
+      </do_elseif>
+      <do_elseif value="$TargetPhase == 'finish'">
+        <signal_cue_instantly cue="Harass_Finish" param="[$oCue]"/>
+      </do_elseif>
+    </actions>
+  </cue>
+
+  <cue name="Harass_CreateMission" instantiate="true" namespace="this">
+    <conditions>
+      <event_cue_signalled/>
+    </conditions>
+    <actions>
+      <set_value name="$oCue" exact="event.param.{1}"/>
+      <set_value name="$oCue.$CurrentPhase" exact="this"/>
+
+      <create_mission
+        cue="$oCue"
+        name="'Harass ship: ' + $oCue.$target.knownname"
+        description="'Harass ship description'"
+        faction="faction.player"
+        type="missiontype.fight"
+        abortable="true"
+      >
+        <briefing>
+          <objective
+            step="$oCue.$MissionStep_DamageShields"
+            action="objective.custom"
+            customaction="'Damage'"
+            text="'Shields'"
+            comment="'Damage shields'"
+          />
+          <objective
+            step="$oCue.$MissionStep_DamageHull"
+            action="objective.custom"
+            customaction="'Damage'"
+            text="'Hull'"
+            comment="'Damage hull'"
+          />
+          <objective
+            step="$oCue.$MissionStep_WaitBailing"
+            action="objective.custom"
+            customaction="'Wait'"
+            text="'Let them think'"
+            comment="'Wait for next bail check'"
+          />
+          <objective
+            step="$oCue.$MissionStep_ForceBailing"
+            action="objective.custom"
+            customaction="'Intimidate'"
+            text="'Ask them to surrender!'"
+            comment="'Ask for Surrender!'"
+          />
+          <objective
+            step="$oCue.$MissionStep_ClaimShip"
+            action="objective.custom"
+            customaction="'Claim'"
+            text="'The abandoned ship'"
+            comment="'Claim the abandoned ship'"
+          />
+        </briefing>
+      </create_mission>
+      <debug_text text="'Created mission to harass: ' + $oCue.$target.knownname"/>
+
+      <signal_cue_instantly cue="Harass_ChangePhase" param="[$oCue, 'damageShields']"/>
+    </actions>
+  </cue>
+
+  <cue name="Harass_DamageShields" instantiate="true" namespace="this">
+    <conditions>
+      <event_cue_signalled/>
+    </conditions>
+    <actions>
+      <set_value name="$oCue" exact="event.param.{1}"/>
+      <set_value name="$oCue.$CurrentPhase" exact="this"/>
+    </actions>
+    <cues>
+      <cue name="Harass_DamageShields_Check" instantiate="true" checkinterval="1s">
+        <actions>
+          <!-- Calculate the target remaining shield -->
+          <set_value name="$targetShieldMissed" exact="100 - $oCue.$target.shieldpercentage"/>
+
+          <!-- If it's less than 10%, move to the next phase -->
+          <do_if value="$targetShieldMissed ge 90">
+            <signal_cue_instantly cue="Harass_ChangePhase" param="[$oCue, 'damageHull']"/>
+          </do_if>
+
+          <!-- If it's greater than 10%, Update the progress bar -->
+          <do_else>
+            <set_objective
+              cue="$oCue"
+              step="$oCue.$MissionStep_DamageShields"
+              action="objective.custom"
+              customaction="'Damage'"
+              text="''Shields''"
+              object="$oCue.$target"
+              comment="Damage shields under 20%"
+              silent="true"
+            >
+              <progress progress="$targetShieldMissed" max="90"/>
+            </set_objective>
+          </do_else>
+        </actions>
+      </cue>
+    </cues>
+  </cue>
+
+  <cue name="Harass_DamageHull" instantiate="true" namespace="this">
+    <conditions>
+      <event_cue_signalled/>
+    </conditions>
+    <actions>
+      <set_value name="$oCue" exact="event.param.{1}"/>
+      <set_value name="$oCue.$CurrentPhase" exact="this"/>
+    </actions>
+    <cues>
+      <cue name="Harass_DamageHull_Check" instantiate="true" checkinterval="1s">
+        <actions>
+          <!-- Calculate the target remaining shield -->
+          <set_value name="$targetHullMissed" exact="100 - $oCue.$target.hullpercentage"/>
+
+          <!-- If it's less than 60%, move to the next phase -->
+          <do_if value="$targetHullMissed ge 40">
+            <signal_cue_instantly cue="Harass_ChangePhase" param="[$oCue, 'finish']"/>
+          </do_if>
+
+          <!-- If it's greater than 10%, Update the progress bar -->
+          <do_else>
+            <set_objective
+              cue="$oCue"
+              step="$oCue.$MissionStep_DamageHull"
+              action="objective.custom"
+              customaction="'Damage'"
+              text="''Hull''"
+              object="$oCue.$target"
+              comment="Damage hull under 60%"
+              silent="true"
+            >
+              <progress progress="$targetHullMissed" max="40"/>
+            </set_objective>
+          </do_else>
+        </actions>
+      </cue>
+    </cues>
+  </cue>
+
+  <cue name="Harass_Finish" instantiate="true" namespace="this">
+    <conditions>
+      <event_cue_signalled/>
+    </conditions>
+    <actions>
+      <set_value name="$oCue" exact="event.param.{1}"/>
+      <set_value name="$oCue.$CurrentPhase" exact="this"/>
+
+      <remove_mission cue="$oCue" type="completed"/>
+
+      <do_if value="$oCue.$CurrentPhase">
+        <cancel_cue cue="$oCue.$CurrentPhase"/>
+        <set_value name="$oCue.$CurrentPhase" exact="null"/>
+      </do_if>
+      <cancel_cue cue="$oCue"/>
+    </actions>
+  </cue>
+
+</cues>
+
+</mdscript>

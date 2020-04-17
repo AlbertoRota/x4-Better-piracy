@@ -12,8 +12,8 @@ If you want to force some S/M ship to bail, right-click it, choose "Harass" and 
 
 ## Detailed changes explanation
 
-### Replaced "Surrender!" dialog option by "Harass" contectual action.
-Replaced the confusing and mostly random "Surrender!" dialog option by a more streamlined "Harass" contectual menu action.
+### Replaced "Surrender!" dialog option by "Harass" contextual action.
+Replaced the confusing and mostly random "Surrender!" dialog option by a more streamlined "Harass" contextual menu action.
 
 If you want to force some S/M ship to bail, right-click it and choose "Harass".
 
@@ -55,7 +55,7 @@ Your marines have been instructed to be as careful as you are when claiming ship
  - Removed "Surrender!" dialog, replaced it by a more streamlined "RightClick -> Harass".
  - Added dependency to "SirNukes Mod Support APIs"
 ### 0.2.0
- - Forcing a pilot to bail out of their ship will negativelly impact your relations with his/her faction.
+ - Forcing a pilot to bail out of their ship will negatively impact your relations with his/her faction.
 ### 0.1.0
  - Replaced NPCs saying the "Abandon ship!" when they bail by a more discrete, less annoying and more informative notification on the lower-right corner.
  - Expanded `hull%` calculations from `20%` to `75%`, which should make the effects of this mod more gradual.

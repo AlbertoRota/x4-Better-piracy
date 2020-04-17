@@ -40,16 +40,6 @@
 			name="$target.pilot.$nextcapturechance"
 			exact="player.age + (5 + (15 * ([$target.hullpercentage, 75].min / 75))i)s"
 		/>
-		
-		<!-- Debug lines, make sure that they are commented out before pushing to GitHub -->
-		<!--
-		<set_value name="$secondstoadd" exact="(5 + (15 * ([$target.hullpercentage, 75].min / 75))i)s"/>
-		<show_notification 
-			text="'Crew bailing: %s - Next roll in: %s seconds'.[$numcrewbailing, $secondstoadd]"
-			timeout="5s"
-			sound="notification_generic"
-		/>
-		-->
 	</replace>
 	
 	<!-- This selector matches line 1012 -->

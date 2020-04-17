@@ -8,15 +8,16 @@ Savegame friendly. (Both adding and removal)
 ## Description
 This mod addresses several piracy gameplay-aspects in X4 that I really dislike.
 
-Now, if you want to force some S/M ship to bail, you need to:
- - Keep their shields under 20%.
- - Keep their hull as low as possible, without killing them.
- - Harass them, using any of the following methods:
-    - Repeatedly demand them to `Surrender!`. (As effective as shooting them)
-    - Shoot them without killing them (`Ion weapons` are the best since they preserve hull).
- - Once they all bail, use a marine to claim the ship, they have been trained to be as careful as you are, so they will not harm the ship any longer.
+If you want to force some S/M ship to bail, right-click it, choose "Harass" and follow the instructions.
 
 ## Detailed changes explanation
+
+### Replaced "Surrender!" dialog option by "Harass" contectual action.
+Replaced the confusing and mostly random "Surrender!" dialog option by a more streamlined "Harass" contectual menu action.
+
+If you want to force some S/M ship to bail, right-click it and choose "Harass".
+
+That will start a quest, like the one for boarding L/XL ships, but targeted towards S/M ships.
 
 ### Removed "Ship type penalty" from the bailing calculation
 Before, you were heavily punished if you were flying a ship with a higher `maxHull` than the enemy you were harassing.
@@ -33,7 +34,7 @@ By default, crew members were only allowed to bail every 30 seconds, but if the 
 Hull degradation will speed this up to every 5s at 1% hull.
 
 ### Improved feedback when crew bails
-When asking to `Surrender!` or while under enemy fire, if the crew is bailing out of the ship, a notification will appear of the lower-left corner detailing it.
+If the crew is bailing out of the ship, a notification will appear of the lower-left corner detailing it.
 
 ### Piracy is a crime!
 By default, nobody cared about piracy, you could hijack 1000 ships in front of them and you will still be their best friend.
@@ -46,8 +47,13 @@ Your marines have been instructed to be as careful as you are when claiming ship
 ## Credits
  - vx -> Author of `True Capture`, where a lot of inspiration was drawn.
  - Kevrlet -> Author of `FixBailChance`, where a lot of inspiration was drawn.
+ - SirNukes -> Author of `SirNukes Mod Support APIs`.
+ - Smashicons -> Author of the image used as Thumbnail (https://www.flaticon.es/autores/smashicons)
 
 ## Changelog
+### 0.3.0
+ - Removed "Surrender!" dialog, replaced it by a more streamlined "RightClick -> Harass".
+ - Added dependency to "SirNukes Mod Support APIs"
 ### 0.2.0
  - Forcing a pilot to bail out of their ship will negativelly impact your relations with his/her faction.
 ### 0.1.0
@@ -55,3 +61,4 @@ Your marines have been instructed to be as careful as you are when claiming ship
  - Expanded `hull%` calculations from `20%` to `75%`, which should make the effects of this mod more gradual.
 ### 0.0.0
  - Initial release!
+ 

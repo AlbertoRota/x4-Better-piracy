@@ -29,8 +29,8 @@
           $section    = 'interaction',
           $name       = Text.$HarassCommand,
           $callback   = Harass_OperationCreated,
-          $enabled_conditions  = ['player_is_piloting'],
-          $disabled_conditions = ['~show_PlayerInteractions'],
+          $enabled_conditions  = ['class_ship'],
+          $disabled_conditions = ['~show_PlayerInteractions', '~is_playerowned'],
           ]"
       />
       <debug_text text="'Better piracy: Registered custom `Harass` command as :' + Text.$HarassCommand"/>
@@ -73,6 +73,9 @@
       <!-- Library - INIT -->
       <library name="Harass_CheckTarget">
         <actions>
+          <do_if value="not $Target.isoperational">
+            <signal_cue_instantly cue="Harass_ChangePhase" param="'finish'"/>
+          </do_if>
           <do_if value="$Target.owner == faction.ownerless">
             <signal_cue_instantly cue="Harass_ChangePhase" param="'claim'"/>
           </do_if>

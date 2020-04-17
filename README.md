@@ -61,3 +61,4 @@ Your marines have been instructed to be as careful as you are when claiming ship
  - Expanded `hull%` calculations from `20%` to `75%`, which should make the effects of this mod more gradual.
 ### 0.0.0
  - Initial release!
+ 

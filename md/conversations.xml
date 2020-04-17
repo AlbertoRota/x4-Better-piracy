@@ -4,4 +4,3 @@
 	<!-- Remove the "Surrender" dialog option -->
 	<remove sel="//do_if[@value='$surrenderoption']"/>
 </diff>
-

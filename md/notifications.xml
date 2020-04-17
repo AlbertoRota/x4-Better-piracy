@@ -48,4 +48,3 @@
 		<signal_cue_instantly cue="PlayerBoarding" param="[$target, 'boarding started']" />
 	</add>
 </diff>
-

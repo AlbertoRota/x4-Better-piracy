@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <diff>
+	<!-- This selector matches line 914 -->
+	<add sel="//cue[@name='PlayerOwnedShipAttacks']/actions/do_else[1]">
+		<!-- Force execution if signaled -->
+		<set_value name="$target.pilot.$nextcapturechance" exact="player.age - 1s"/>
+	</add>
+	
 	<!-- This selector matches line 940 -->
 	<replace sel="(//cue[@name='PlayerOwnedShipAttacks']//set_value[@name='$ejectchance'])[1]">
 		<!-- Remove the ship size penalty from bail chance calculation -->

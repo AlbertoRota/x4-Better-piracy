@@ -215,6 +215,7 @@
         </conditions>
         <actions>
           <set_value name="$CurrentPhase" exact="this"/>
+          <set_value name="$InitialNextcapturechance" exact="$Target.pilot.$nextcapturechance"/>
           <set_value name="$InitialTimeLeft" exact="$Target.pilot.$nextcapturechance - player.age"/>
         </actions>
         <cues>
@@ -224,7 +225,7 @@
               <include_actions ref="Harass_CheckShields"/>
               <include_actions ref="Harass_CheckHull"/>
     
-              <set_value name="$CurrentTimeLeft" exact="$Target.pilot.$nextcapturechance - player.age"/>
+              <set_value name="$CurrentTimeLeft" exact="$InitialNextcapturechance - player.age"/>
               <do_if value="$CurrentTimeLeft le 0">
                 <signal_cue_instantly cue="Harass_ChangePhase" param="'askSurrender'"/>
               </do_if>

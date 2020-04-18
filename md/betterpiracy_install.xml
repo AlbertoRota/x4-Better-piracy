@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<mdscript name="Betterpiracy_install" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://x4libonline.ddns.net/libraries/md.xsd">
+  <cues>
+    <cue name="Betterpiracy_install_notification">
+      <conditions>
+        <check_any>
+          <event_cue_signalled cue="md.Setup.GameStart" />
+          <event_player_created/>
+        </check_any>
+      </conditions>
+      <actions>
+         <show_help duration="10s" custom="'Better piracy installed.'"/>
+      </actions>
+    </cue>
+</cues>
+</mdscript>

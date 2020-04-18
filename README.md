@@ -21,17 +21,8 @@ That will start a quest, like the one for boarding L/XL ships, but targeted towa
 
 ### Removed "Ship type penalty" from the bailing calculation
 Before, you were heavily punished if you were flying a ship with a higher `maxHull` than the enemy you were harassing.
+
 This has been removed.
-
-### Number of bailing crew will increase the worse the hull state is
-A good pilot (High morale) will be able to keep the crew together, but even the best pilot will have problems doing it if the ship is falling apart under enemy fire.
-
-The worse the hull state is, the less the pilot morale is factored in.
-
-### Bailing check frequency will increase the worse the hull state is
-By default, crew members were only allowed to bail every 30 seconds, but if the ship is falling apart under enemy fire, they will speed up the evacuation process.
-
-Hull degradation will speed this up to every 5s at 1% hull.
 
 ### Improved feedback when crew bails
 If the crew is bailing out of the ship, a notification will appear of the lower-left corner detailing it.
@@ -51,6 +42,9 @@ Your marines have been instructed to be as careful as you are when claiming ship
  - Smashicons -> Author of the image used as Thumbnail (https://www.flaticon.es/autores/smashicons)
 
 ## Changelog
+### 0.4.0
+ - Reworked all the "RightClick -> Harass" code, not should work much better.
+ - Externalized hard-coded texts to I18N files (English and Spanish).
 ### 0.3.0
  - Removed "Surrender!" dialog, replaced it by a more streamlined "RightClick -> Harass".
  - Added dependency to "SirNukes Mod Support APIs"

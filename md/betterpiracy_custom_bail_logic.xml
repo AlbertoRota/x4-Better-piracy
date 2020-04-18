@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<mdscript name="Betterpiracy_custom_bail_logic" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://x4libonline.ddns.net/libraries/md.xsd">
+<cues>
+  <!-- Stripped down version of "PlayerOwnedShipAttacks" in "notifications.xml" -->
+  <!-- It will always execute the "Bail check", since all the pre-condition are checked elsewhere (See "betterpiracy_harass.xml") -->
+  <cue name="PlayerOwnedShipHarass" instantiate="true" namespace="this">
+    <conditions>
+      <event_cue_signalled/>
+      <set_value name="$target" exact="event.param.$Target"/>
+      <check_value value="$target and $target.isoperational"/>
+      <check_value value="$target.isclass.ship and $target.pilot.exists" />
+      <check_value value="not $target.isclass.station"/>
+      <check_value value="not $target.isplayerowned" />
+      <check_value value="not $target.isunit"/>
+      <check_value value="not $target.islasertower"/>
+      <check_value value="@$target.order.state != orderstate.critical"/>
+    </conditions>
+    <actions>
+      <set_value name="$MissionCue" exact="event.param"/>
+      <set_value name="$target" exact="$MissionCue.$Target"/>
+      <set_value name="$targetEffectiveMorale" exact="[$target.pilot.skill.morale - $MissionCue.$Pressure, 0].max"/>
+      <set_value name="$attacker" exact="player.occupiedship"/>
+      <set_value name="$isPlayerInvolved" exact="player.sector.knownname == $target.sector.knownname"/>
+      <debug_text text="'Harass bail check: %s %s forcing %s %s to bail.'.[$attacker.idcode, $attacker.knownname, $target.idcode, $target.knownname]"/>
+      
+      <!-- Determine how many (If any) crew members are going to bail -->
+      <do_if value="$target.iscapturable and $target.pilot.owner != faction.player">
+        <!-- Calculate the chance of crew bailing out-->
+        <set_value
+          name="$ejectchance_base"
+          exact="60"
+          comment="Best case scenario, anything else will be lower."
+        />
+        <set_value
+          name="$ejectchance_pilot_morale_factor" 
+          exact="(15 - $targetEffectiveMorale)f / 15.0"
+          comment="Inversely proportional to pilot morale, Pressure reduces pilot morale."
+        />
+        <set_value
+          name="$ejectchance_shield_hull_factor"
+          exact="[(($attacker.shieldpercentage + $attacker.hullpercentage) / [($target.shieldpercentage + $target.hullpercentage), 1.0].max), 1.0].min"
+          comment="Compare ship shapes, capped at 1"
+        />
+        <set_value
+          name="$ejectchance_capital_ship_factor"
+          exact="if $target.iscapitalship then 0.5 else 1"
+          comment="Halve the chance if it's a capital ship"
+        />
+        <set_value name="$ejectchance" exact="($ejectchance_base * $ejectchance_pilot_morale_factor * $ejectchance_shield_hull_factor * $ejectchance_capital_ship_factor)i"/>
+        <debug_text text="'Harass bail check: Eject chance = %s. (Base = %s, Pilot_morale_factor = %s, Shield_hull_factor = %s, Capital_ship_factor = %s)'.[$ejectchance, $ejectchance_base, $ejectchance_pilot_morale_factor, $ejectchance_shield_hull_factor, $ejectchance_capital_ship_factor]"/>
+        
+        <do_if value="true" chance="$ejectchance">
+          <!-- Calculate the number of crew bailing out-->
+          <set_value
+            name="$numcrewbailing_base" 
+            exact="[($target.people.count * 0.2)i, 3].max"
+            comment="Best case scenario, up to 1/5 of the remaining crew, with a minimun of 3."
+          />
+          <set_value
+            name="$numcrewbailing_pilot_morale_factor" 
+            exact="(15 - $targetEffectiveMorale)f / 15.0"
+            comment="Inversely proportional to pilot morale, Pressure reduces pilot morale."
+          />
+          <set_value 
+            name="$numcrewbailing"
+            exact="[[($numcrewbailing_base * $numcrewbailing_pilot_morale_factor)i, 1].max, $target.people.count].min"
+            comment="The number is constrained between 1 and $target.people.count to avoid locks"
+          />
+          <debug_text text="'Harass bail check: Number of crew being ejected = %s. (Base = %s, Pilot_morale_factor = %s)'.[$numcrewbailing, $numcrewbailing_base, $numcrewbailing_pilot_morale_factor]"/>
+
+          <do_if value="($numcrewbailing ge $target.people.count) and not $target.iscapitalship">
+            <!-- Pilot and remaining crew all bail -->
+            <set_value name="$pilotbail"/>
+            <set_value name="$Speak_Line" exact="10034" comment="(pilot bailing from ship)"/>
+          </do_if>
+          <do_else>
+            <!-- Only crew is going to bail -->
+            <set_value name="$Speak_Line" exact="10030" comment="(evacuation - ship)"/>
+            <show_notification 
+              text="'%s crew member/s bailed out of:\n %s (%s)'.[$numcrewbailing, $target.knownname, $target.idcode]"
+              timeout="5s"
+              sound="notification_generic"
+            />
+          </do_else>
+
+          <set_value name="$eject"/>
+        </do_if>
+        <do_else>
+          <!-- No-one is going to bail -->
+          <set_value name="$Speak_Line" exact="5037" comment="(refusal to surrender - in danger)"/>
+        </do_else>
+
+        <do_if value="$isPlayerInvolved and $Speak_Line? and $target.owner != faction.xenon">
+          <speak actor="$target.pilot" line="$Speak_Line"/>
+        </do_if>
+
+        <do_if value="$eject?">
+          <eject_people object="$target" attacker="$attacker" max="$numcrewbailing"/>
+          <remove_value name="$numcrewbailing"/>
+
+          <!-- Keep this in sinc with "PlayerOwnedShipAttacks" in "notifications.xml" -->
+          <do_if value="$pilotbail?">
+            <!-- Write event to the Player log book -->
+            <substitute_text text="$logtext" source="{1016,79}" comment="Forced pilot to leave ship $SHIP$ in sector $SECTOR$.">
+              <replace string="'$SHIP$'" with="$target.knownname" />
+              <replace string="'$SECTOR$'" with="$target.pilot.sector.knownname" />
+            </substitute_text>
+            <write_to_logbook category="upkeep" title="$logtext" interaction="showonmap" object="$target"/>
+            <debug_text text="'Harass bail check: pilot about to bail from %s %s %s %s'.[$target.class, $target.idcode, $target.knownname, $target]"/>
+
+            <!-- Reputation hit for doing piracy -->
+            <signal_cue_instantly cue="PlayerBoarding" param="[$target, 'boarding started']" />
+            
+            <!-- Clear all target orders and empty it -->
+            <create_order id="'Wait'" object="$target" default="true">
+              <param name="allowdocked" value="not $target.iscapitalship"/>
+            </create_order>
+            <cancel_all_orders object="$target"/>
+            <cease_fire object="$target"/>
+            <eject_npcs object="$target"/>
+
+            <!-- Remove target cargo -->
+            <!-- TODO: Review this logic -->
+            <do_all exact="$target.cargo.count" counter="$i" reverse="true">
+              <set_value name="$removedware" exact="$target.cargo.list.{$i}"/>
+              <set_value name="$removedmaxamount" exact="($target.cargo.{$removedware}.count * ($target.pilot.combinedskill / 100.0))i"/>
+              <debug_text text="'Harass bail check: removing from %s to %s out of %s %s. combinedskill: %s'.[($removedmaxamount * 0.8)i, $removedmaxamount, $target.cargo.{$removedware}.count, $removedware.name, $target.pilot.combinedskill]"/>
+              <remove_cargo object="$target" ware="$removedware" min="($removedmaxamount * 0.8)i" max="$removedmaxamount"/>
+            </do_all>
+            
+            <!-- Further damage the ship hull -->
+            <!-- TODO: Review this logic -->
+            <set_value name="$damageminpercent" exact="100 - $target.pilot.combinedskill"/>
+            <do_if value="$damageminpercent gt 0">
+              <set_object_hull object="$target" min="[$target.hullpercentage, [$damageminpercent, 5].max].min" max="[$target.hullpercentage, [$damageminpercent, 10].max].min"/>
+            </do_if>
+            <do_else>
+              <destroy_object object="$target" explosion="true"/>
+            </do_else>
+
+            <!-- If the ship is still alive, destroy some of their componets (Shields excluded to keep compatibility with VRO)-->
+            <!-- TODO: Review this logic -->
+            <do_if value="$target.exists">
+              <add_effect object="$target" effect="$target.scuttleeffect"/>
+              <find_object_component name="$subcomponents" object="$target" class="[class.weapon, class.turret]" multiple="true"/>
+              <shuffle_list list="$subcomponents"/>
+              <do_all exact="[$subcomponents.count, $target.pilot.combinedskill / 10].min" counter="$i" reverse="true">
+                <debug_text text="'destroying %s'.[$subcomponents.{$i}.knownname]" chance="0"/>
+                <destroy_object object="$subcomponents.{$i}" explosion="false"/>
+                <remove_value name="$subcomponents.{$i}"/>
+              </do_all>
+            </do_if>
+
+            <set_value name="stat.pilots_bailed" operation="add"/>
+            <remove_value name="$pilotbail"/>
+          </do_if>
+          <remove_value name="$eject"/>
+        </do_if>
+      </do_if>
+    </actions>
+  </cue>
+</cues>
+</mdscript>

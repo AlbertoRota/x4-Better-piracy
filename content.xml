@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<content id="ws_2056100433" name="Better piracy" description="X4 Foundations mod to improve piracy." version="300" save="0" author="alberto-rota" date="2020-04-17" sync="false" lastupdate="1587146967">
-  <langugage language="7" description=" "/>
-  <langugage language="33" description=" "/>
-  <langugage language="37" description=" "/>
-  <langugage language="39" description=" "/>
+<content id="ws_2056100433" name="Better piracy" description="X4 Foundations mod to improve piracy." version="400" save="0" author="alberto-rota" date="2020-04-17" sync="false" lastupdate="1587146967">
+  <langugage language="7" description="X4 Foundations mod to improve piracy."/>
+  <langugage language="33" description="X4 Foundations mod to improve piracy."/>
+  <langugage language="34" description="Mod para X4 Foundations que mejora la piratería."/>
+  <langugage language="39" description="X4 Foundations mod to improve piracy."/>
   <langugage language="44" description="X4 Foundations mod to improve piracy."/>
-  <langugage language="49" description=" "/>
-  <langugage language="55" description=" "/>
-  <langugage language="81" description=" "/>
-  <langugage language="82" description=" "/>
-  <langugage language="86" description=" "/>
-  <langugage language="88" description=" "/>
+  <langugage language="49" description="X4 Foundations mod to improve piracy."/>
+  <langugage language="55" description="X4 Foundations mod to improve piracy."/>
+  <langugage language="81" description="X4 Foundations mod to improve piracy."/>
+  <langugage language="82" description="X4 Foundations mod to improve piracy."/>
+  <langugage language="86" description="X4 Foundations mod to improve piracy."/>
+  <langugage language="88" description="X4 Foundations mod to improve piracy."/>
   <dependency id="ws_2042901274" name="SirNukes Mod Support APIs"/>
 </content>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Specific language file: applies to Spanish only -->
+<language id="34">
+  <page id="61537" title="Better piracy texts" descr="0" voice="no">
+    <t id="5100">Acosar</t>
+    <t id="5101">(Harass mission title)Operación de acoso </t>
+    <t id="5102">(Harass mission description)Presta apoyo a la operación de acoso. </t>
+    <t id="5103">(Increase pressure objective)Aumenta la presión </t>
+    <t id="5104">(Maintain pressure objective)Manten lapresión </t>
+    <t id="5105">(Damage shields)Destruye sus escudos </t>
+    <t id="5106">(Damage hull)Daña su casco </t>
+    <t id="5107">(Keep pressing)No mates al objetivo! </t>
+    <t id="5108">(Claim)La nave está vacía </t>
+  </page>
+</language>

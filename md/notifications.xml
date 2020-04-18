@@ -1,46 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <diff>
-	<!-- This selector matches line 914 -->
-	<add sel="//cue[@name='PlayerOwnedShipAttacks']/actions/do_else[1]">
-		<!-- Force execution if signaled -->
-		<set_value name="$target.pilot.$nextcapturechance" exact="player.age - 1s"/>
-	</add>
-	
 	<!-- This selector matches line 940 -->
 	<replace sel="(//cue[@name='PlayerOwnedShipAttacks']//set_value[@name='$ejectchance'])[1]">
 		<!-- Remove the ship size penalty from bail chance calculation -->
+		<!-- Sightly lowered the base chance to happen to make the "Harass" command more attractive -->
 		<set_value
 			name="$ejectchance"
-			exact="( (46 - $target.combinedskill / 5) * [(($attacker.shieldpercentage + $attacker.hullpercentage) / [($target.shieldpercentage + $target.hullpercentage), 1.0].max), 1.0].min )i"
+			exact="( (36 - $target.combinedskill / 5) * [(($attacker.shieldpercentage + $attacker.hullpercentage) / [($target.shieldpercentage + $target.hullpercentage), 1.0].max), 1.0].min )i"
 		/>
 	</replace>
 	
 	<!-- This selector matches line 954 -->
-	<replace sel="//do_else/set_value[@name='$numcrewbailing']">
-		<!-- The worse the hull state is, the less the pilot morale is factored in -->
-		<set_value
-			name="$numcrewbailing"
-			exact="[[[($target.people.capacity * ((15 - ($target.pilot.skill.morale * ([$target.hullpercentage, 75].min / 75))i)f / 15.0))i, $target.people.count].min, 1].max, 3].min"
-		/>
-		
+	<add sel="//do_else/set_value[@name='$numcrewbailing']">
 		<!-- If someone is bailing, provide feedback to the player -->
 		<do_if value="$attacker == @player.occupiedship">
 			<show_notification 
-				text="'%s crew member/s bailed out of:\n %s %s'.[$numcrewbailing, $target.idcode, $target.knownname]"
+				text="'%s crew member/s bailed out of:\n %s (%s)'.[$numcrewbailing, $target.knownname, $target.idcode]"
 				timeout="5s"
 				sound="notification_generic"
 			/>
 		</do_if>
-	</replace>
-	
-	<!-- This selector matches line 971 -->
-	<replace sel="//do_if[@value='not @$pilotbail']/set_value[@name='$target.pilot.$nextcapturechance']">
-		<!-- Bailing check frecuency is increased the worse the hull state is -->
-		<set_value
-			name="$target.pilot.$nextcapturechance"
-			exact="player.age + (5 + (15 * ([$target.hullpercentage, 75].min / 75))i)s"
-		/>
-	</replace>
+	</add>
 	
 	<!-- This selector matches line 1012 -->
 	<add sel="//eject_npcs" pos="before">

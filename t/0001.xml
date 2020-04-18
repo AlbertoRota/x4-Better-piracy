@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<!-- Specific language file: applies to English only -->
-<language id="44">
+<!-- General language file: applies to all which does not have their own language files -->
+<language>
   <page id="61537" title="Better piracy texts" descr="0" voice="no">
     <t id="5100">Harass</t>
     <t id="5101">(Harass mission title)Harass Operation </t>

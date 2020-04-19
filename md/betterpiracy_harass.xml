@@ -47,6 +47,7 @@
       <set_value name="$MissionCue"                exact="Harass_OperationCreated"/>
       <set_value name="$CurrentPhase"              exact="null"/>
       <set_value name="$Pressure"                  exact="0"/>
+      <set_value name="$BailAttepmps"              exact="0"/>
 
       <set_value name="$MissionStep_DamageShields" exact="1"/>
       <set_value name="$MissionStep_DamageHull"    exact="2"/>
@@ -93,9 +94,15 @@
       </library>
       <library name="Harass_CheckHull">
         <actions>
-          <do_if value="$Target.hullpercentage ge 75">
+          <do_if value="$BailAttepmps ge $Config.{'$harass_bail_attepmps_before_late'} and $Target.hullpercentage ge $Config.{'$late_harass_hull_threshold'}">
             <signal_cue_instantly cue="Harass_ChangePhase" param="'damageHull'"/>
           </do_if>
+          <do_elseif value="$BailAttepmps ge $Config.{'$harass_bail_attepmps_before_mid'} and $Target.hullpercentage ge $Config.{'$mid_harass_hull_threshold'}">
+            <signal_cue_instantly cue="Harass_ChangePhase" param="'damageHull'"/>
+          </do_elseif>
+          <do_elseif value="$Target.hullpercentage ge $Config.{'$early_harass_hull_threshold'}">
+            <signal_cue_instantly cue="Harass_ChangePhase" param="'damageHull'"/>
+          </do_elseif>
         </actions>
       </library>
       <!-- Library - END -->
@@ -166,7 +173,7 @@
           <cue name="Harass_DamageShields_Check" instantiate="true" checkinterval="1s">
             <actions>
               <include_actions ref="Harass_CheckTarget"/>
-              
+
               <do_if value="$Target.shieldpercentage le ($Config.{'$harass_shield_threshold'} - 10)">
                 <signal_cue_instantly cue="Harass_ChangePhase" param="'damageHull'"/>
               </do_if>
@@ -193,13 +200,23 @@
               <include_actions ref="Harass_CheckTarget"/>
               <include_actions ref="Harass_CheckShields"/>
     
+              <do_if value="$BailAttepmps ge $Config.{'$harass_bail_attepmps_before_late'}">
+                <set_value name="$MissedHullThreshold" exact="100 - $Config.{'$late_harass_hull_threshold'}"/>
+              </do_if>
+              <do_elseif value="$BailAttepmps ge $Config.{'$harass_bail_attepmps_before_mid'}">
+                <set_value name="$MissedHullThreshold" exact="100 - $Config.{'$mid_harass_hull_threshold'}"/>
+              </do_elseif>
+              <do_else>
+                <set_value name="$MissedHullThreshold" exact="100 - $Config.{'$early_harass_hull_threshold'}"/>
+              </do_else>
+
               <set_value name="$TargetHullMissed" exact="100 - $Target.hullpercentage"/>
-              <do_if value="$TargetHullMissed ge 40">
+              <do_if value="$TargetHullMissed ge $MissedHullThreshold">
                 <signal_cue_instantly cue="Harass_ChangePhase" param="'waitSurrender'"/>
               </do_if>
               <do_else>
                 <set_objective cue="$MissionCue" step="$MissionStep_DamageHull" action="objective.custom" customaction="{61537, 5103}" text="{61537, 5106}" object="$Target" silent="true">
-                  <progress progress="$TargetHullMissed" max="40"/>
+                  <progress progress="$TargetHullMissed" max="$MissedHullThreshold"/>
                 </set_objective>
               </do_else>
             </actions>
@@ -231,6 +248,7 @@
               <do_if value="$CurrentTimeLeft le 0">
                 <set_value name="$NextBailCheck" exact="player.age + 5s"/>
                 <set_value name="$Pressure" operation="add"/>
+                <set_value name="$BailAttepmps" operation="add"/>
                 <signal_cue_instantly cue="md.Betterpiracy_custom_bail_logic.PlayerOwnedShipHarass" param="$MissionCue"/>
               </do_if>
             </actions>

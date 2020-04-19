@@ -2,6 +2,7 @@
 <!-- General language file: applies to all which does not have their own language files -->
 <language>
   <page id="61537" title="Better piracy texts" descr="0" voice="no">
+    <!-- Harass mission related texts -->
     <t id="5100">Harass</t>
     <t id="5101">(Harass mission title)Harass Operation </t>
     <t id="5102">(Harass mission description)Lend aid to the harass operation. </t>
@@ -11,5 +12,49 @@
     <t id="5106">(Damage hull)Damage their hull </t>
     <t id="5107">(Keep pressing)Do not kill the target! </t>
     <t id="5108">(Claim)The ship was abandoned </t>
+    <!-- Config related texts -->
+    <t id="5150">(Menu category)Better piracy</t>
+    <t id="5151">(Harass shield threshold name)Harass shield threshold</t>
+    <t id="5152">(Harass shield threshold mouseover)During a "Harass" operation, if the % of shields of the target is greater than this value, the operation will be rolled back to the "Shoot their shields down" phase.\n\nAlso, the "Shoot their shields down" phase will finish 10% under this value.</t>
+    <t id="5153">(Early harass hull threshold name)Early harass hull threshold</t>
+    <t id="5154">(Early harass hull threshold mouseover)During the early phases of a "Harass" operation, if the % of hull of the target is greater than this value, the operation will be rolled back to the "Damage their hull" phase.</t>
+    <t id="5155">(Harass bail attepmps before mid name)Harass bail attepmps before mid</t>
+    <t id="5156">(Harass bail attepmps before mid mouseover)Once this number of bail checks has been done, the hull requirement will be the one specified in "Mid harass hull threshold" instead of the one specified in "Early harass hull threshold"</t>
+    <t id="5157">(Mid harass hull threshold name)Mid harass hull threshold</t>
+    <t id="5158">(Mid harass hull threshold mouseover)During the mid phases of a "Harass" operation, if the % of hull of the target is greater than this value, the operation will be rolled back to the "Damage their hull" phase.</t>
+    <t id="5159">(Harass bail attepmps before late name)Harass bail attepmps before late</t>
+    <t id="5160">(Harass bail attepmps before late mouseover)Once this number of bail checks has been done, the hull requirement will be the one specified in "Late harass hull threshold" instead of the one specified in "Mid harass hull threshold"</t>
+    <t id="5161">(Late harass hull threshold name)Late harass hull threshold</t>
+    <t id="5162">(Late harass hull threshold mouseover)During the late phases of a "Harass" operation, if the % of hull of the target is greater than this value, the operation will be rolled back to the "Damage their hull" phase.</t>
+    <t id="5163">(Keep pressure timer name)Keep pressure timer</t>
+    <t id="5164">(Keep pressure timer mouseover)During a "Harass" operation, the amount of time that each "Maintain pressure" check requires.\n\nA bail check will be trigered after each cycle and a "Pressure" point will be added to the pilot".</t>
+    <t id="5165">(Keep pressure max distance - S/M name)Keep pressure max distance - S/M</t>
+    <t id="5166">(Keep pressure max distance - S/M mouseover)During a "Harass" operation against an S/M sized ship, "Maintain pressure" will only advance if you are closer than this.\n\nIf you are further, the operation will be rolled back to the "Chase your target" phase.</t>
+    <t id="5167">(Keep pressure max distance - L/XL name)Keep pressure max distance - L/XL</t>
+    <t id="5168">(Keep pressure max distance - L/XL mouseover)During a "Harass" operation against an L/XL sized ship, "Maintain pressure" will only advance if you are closer than this.\n\nIf you are further, the operation will be rolled back to the "Chase your target" phase.</t>
+    <t id="5169">(Pressure build-up rate name)Pressure build-up rate</t>
+    <t id="5170">(Pressure build-up rate mouseover)How much each "Pressure" point undermines the targets pilot morale.\n\nOne pressure point is added after each "Maintain pressure" cycle.</t>
+    <t id="5171">(Harass L/XL min crew left - Base name)Harass L/XL min crew left - Base</t>
+    <t id="5172">(Harass L/XL min crew left - Base mouseover)During a "Harass" operation against an L/XL sized ship, if the current % of crew left is under this, the operation will be advanced to the "Board" phase.</t>
+    <t id="5173">(Harass L/XL min crew left - Pilot name)Harass L/XL min crew left - Pilot</t>
+    <t id="5174">(Harass L/XL min crew left - Pilot mouseover)Percentage to be added to "Harass L/XL min crew left - Base" depending of the pilot morale, a 5 star pilot will add 100% of the specified value, a 0 star pilot will add nothing.\n\n"Pressure" points do NOT affect this.</t>
+    <t id="5175">(Harass base bail chance name)Harass base bail chance</t>
+    <t id="5176">(Harass base bail chance mouseover)Percentage of harass bail checks that will pass in the best-case scenario.\n\nIt will be reduced by several factors, such a pilot morale, etc.</t>
+    <t id="5177">(Harass base bail number name)Harass base bail chance</t>
+    <t id="5178">(Harass base bail number mouseover)Percentage of the current crew that will bail in the best-case scenario when a harass bail check passes.\n\nIt will be reduced by several factors, such a pilot morale, etc.</t>
+    <t id="5179">(Harass reputation hit name)Harass reputation hit</t>
+    <t id="5180">(Harass reputation hit mouseover)When enabled, sucssesfull "Harass" operations will decrease your reputation with the pilots faction.\n\nThe logic applied to determine if it happens is the same than when you board an L/XL ship.</t>
+    <t id="5181">(Harass bailing pilots damage hull name)Harass reputation hit</t>
+    <t id="5182">(Harass bailing pilots damage hull mouseover)When enabled, after sucssesfull "Harass" operations the bailing pilot will further damage the ship.\n\nThe damage inflicted is proportional to the pilot morale.</t>
+    <t id="5183">(Harass bailing pilots destroy components name)Harass bailing pilots destroy components</t>
+    <t id="5184">(Harass bailing pilots destroy components mouseover)When enabled, after sucssesfull "Harass" operations the bailing pilot will destroy some of the ship componets.\n\nThe number of componets destroyed is proportional to the pilot morale, but shields are never destroyed.</t>
+    <t id="5185">(Combat base bail chance name)Combat base bail chance</t>
+    <t id="5186">(Combat base bail chance mouseover)Percentage of combat bail checks that will pass in the best-case scenario.\n\nIt will be reduced by several factors, such a pilot morale, etc.</t>
+    <t id="5187">(Combat reputation hit name)Combat reputation hit</t>
+    <t id="5188">(Combat reputation hit mouseover)When enabled, shooting a target until it bails will decrease your reputation with the pilots faction.\n\nThe logic applied to determine if it happens is the same than when you board an L/XL ship.</t>
+    <t id="5189">(Combat bailing pilots damage hull name)Combat reputation hit</t>
+    <t id="5190">(Combat bailing pilots damage hull mouseover)When enabled, after shooting a target until it bails the bailing pilot will further damage the ship.\n\nThe damage inflicted is proportional to the pilot morale.</t>
+    <t id="5191">(Combat bailing pilots destroy components name)Combat bailing pilots destroy components</t>
+    <t id="5192">(Combat bailing pilots destroy components mouseover)When enabled, after after shooting a target until it bails the bailing pilot will destroy some of the ship componets.\n\nThe number of componets destroyed is proportional to the pilot morale.</t>
   </page>
 </language>

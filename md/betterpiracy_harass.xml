@@ -52,6 +52,8 @@
       <set_value name="$MissionStep_DamageHull"    exact="2"/>
       <set_value name="$MissionStep_WaitBailing"   exact="3"/>
       <set_value name="$MissionStep_ClaimShip"     exact="4"/>
+
+      <set_value name="$Config" exact="md.Betterpiracy_config.Config.$Config"/>
     </actions>
     <cues>
       <cue name="Harass_Init" instantiate="true">
@@ -84,7 +86,7 @@
       </library>
       <library name="Harass_CheckShields">
         <actions>
-          <do_if value="$Target.shieldpercentage ge 20">
+          <do_if value="$Target.shieldpercentage ge $Config.{'$harass_shield_threshold'}">
             <signal_cue_instantly cue="Harass_ChangePhase" param="'damageShields'"/>
           </do_if>
         </actions>
@@ -164,14 +166,13 @@
           <cue name="Harass_DamageShields_Check" instantiate="true" checkinterval="1s">
             <actions>
               <include_actions ref="Harass_CheckTarget"/>
-    
-              <set_value name="$TargetShieldMissed" exact="100 - $Target.shieldpercentage"/>
-              <do_if value="$TargetShieldMissed ge 90">
+              
+              <do_if value="$Target.shieldpercentage le ($Config.{'$harass_shield_threshold'} - 10)">
                 <signal_cue_instantly cue="Harass_ChangePhase" param="'damageHull'"/>
               </do_if>
               <do_else>
                 <set_objective cue="$MissionCue" step="$MissionStep_DamageShields" action="objective.custom" customaction="{61537, 5103}" text="{61537, 5105}" object="$Target" silent="true">
-                  <progress progress="$TargetShieldMissed" max="90"/>
+                  <progress progress="100 - $Target.shieldpercentage" max="100 - ($Config.{'$harass_shield_threshold'} - 10)"/>
                 </set_objective>
               </do_else>
             </actions>

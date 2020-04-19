@@ -21,7 +21,7 @@
     <library name="Reset_Config">
       <actions>
         <set_value
-          name="Config.$vars"
+          name="Config.$Config"
           exact="table[
             $harass_shield_threshold = null,
             $early_harass_hull_threshold = null,
@@ -331,9 +331,9 @@
         <event_cue_signalled />
       </conditions>
       <actions>
-        <debug_text text="'Harass config - Changing ' + event.param.$id + ' from ' + Config.$vars.{event.param.$id} + ' to ' + event.param.$value"/>
+        <debug_text text="'Harass config - Changing ' + event.param.$id + ' from ' + Config.$Config.{event.param.$id} + ' to ' + event.param.$value"/>
         <set_value
-          name="Config.$vars.{event.param.$id}"
+          name="Config.$Config.{event.param.$id}"
           exact="event.param.$value"
         />
       </actions>

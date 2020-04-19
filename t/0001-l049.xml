@@ -10,8 +10,9 @@
     <t id="5104">(Maintain pressure objective)Behalte diesen Druck bei </t>
     <t id="5105">(Damage shields)Schieße ihre Schilde runter </t>
     <t id="5106">(Damage hull)Beschädige ihre Hülle </t>
-    <t id="5107">(Keep pressing)Zerstöre das Schiff nicht! </t>
-    <t id="5108">(Claim)Das Schiff wurde aufgegeben </t>
+    <t id="5107">(Approach)Get closer to the target </t>
+    <t id="5108">(Keep pressing)Zerstöre das Schiff nicht! </t>
+    <t id="5109">(Claim)Das Schiff wurde aufgegeben </t>
     <!-- Config related texts -->
     <t id="5150">(Menu category)Better piracy</t>
     <t id="5151">(Harass shield threshold name)Harass shield threshold</t>

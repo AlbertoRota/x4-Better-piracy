@@ -10,8 +10,9 @@
     <t id="5104">(Maintain pressure objective)Maintain pressure </t>
     <t id="5105">(Damage shields)Shoot their shields down </t>
     <t id="5106">(Damage hull)Damage their hull </t>
-    <t id="5107">(Keep pressing)Do not kill the target! </t>
-    <t id="5108">(Claim)The ship was abandoned </t>
+    <t id="5107">(Approach)Get closer to the target </t>
+    <t id="5108">(Keep pressing)Do not kill the target! </t>
+    <t id="5109">(Claim)The ship was abandoned </t>
     <!-- Config related texts -->
     <t id="5150">(Menu category)Better piracy</t>
     <t id="5151">(Harass shield threshold name)Harass shield threshold</t>

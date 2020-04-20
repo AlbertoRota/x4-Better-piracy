@@ -16,11 +16,14 @@
       <check_value value="@$target.order.state != orderstate.critical"/>
     </conditions>
     <actions>
-      <set_value name="$MissionCue" exact="event.param"/>
-      <set_value name="$target" exact="$MissionCue.$Target"/>
-      <set_value name="$targetEffectiveMorale" exact="[$target.pilot.skill.morale - $MissionCue.$Pressure, 0].max"/>
-      <set_value name="$attacker" exact="player.occupiedship"/>
-      <set_value name="$isPlayerInvolved" exact="player.sector.knownname == $target.sector.knownname"/>
+      <set_value name="$MissionCue"             exact="event.param"/>
+      <set_value name="$target"                 exact="$MissionCue.$Target"/>
+      <set_value name="$Config"                 exact="md.Betterpiracy_config.Config.$Config"/>
+
+      <set_value name="$targetEffectiveMorale"  exact="[$target.pilot.skill.morale - ($MissionCue.$Pressure * $Config.{'$pressure_buildup_rate'})i, 0].max"/>
+      <set_value name="$attacker"               exact="player.occupiedship"/>
+      <set_value name="$isPlayerInvolved"       exact="player.sector.knownname == $target.sector.knownname"/>
+      
       <debug_text text="'Harass bail check: %s %s forcing %s %s to bail.'.[$attacker.idcode, $attacker.knownname, $target.idcode, $target.knownname]"/>
       
       <!-- Determine how many (If any) crew members are going to bail -->
@@ -28,7 +31,7 @@
         <!-- Calculate the chance of crew bailing out-->
         <set_value
           name="$ejectchance_base"
-          exact="60"
+          exact="$Config.{'$harass_base_bail_chance'}"
           comment="Best case scenario, anything else will be lower."
         />
         <set_value
@@ -53,7 +56,7 @@
           <!-- Calculate the number of crew bailing out-->
           <set_value
             name="$numcrewbailing_base" 
-            exact="[($target.people.count * 0.2)i, 3].max"
+            exact="[($target.people.count * $Config.{'$harass_base_bail_number'} / 100)i, 3].max"
             comment="Best case scenario, up to 1/5 of the remaining crew, with a minimun of 3."
           />
           <set_value
@@ -109,7 +112,9 @@
             <debug_text text="'Harass bail check: pilot about to bail from %s %s %s %s'.[$target.class, $target.idcode, $target.knownname, $target]"/>
 
             <!-- Reputation hit for doing piracy -->
-            <signal_cue_instantly cue="PlayerBoarding" param="[$target, 'boarding started']" />
+            <do_if value="$Config.{'$harass_reputation_hit'} == 1">
+              <signal_cue_instantly cue="PlayerBoarding" param="[$target, 'boarding started']" />
+            </do_if>
             
             <!-- Clear all target orders and empty it -->
             <create_order id="'Wait'" object="$target" default="true">
@@ -129,26 +134,28 @@
             </do_all>
             
             <!-- Further damage the ship hull -->
-            <!-- TODO: Review this logic -->
-            <set_value name="$damageminpercent" exact="100 - $target.pilot.combinedskill"/>
-            <do_if value="$damageminpercent gt 0">
-              <set_object_hull object="$target" min="[$target.hullpercentage, [$damageminpercent, 5].max].min" max="[$target.hullpercentage, [$damageminpercent, 10].max].min"/>
+            <do_if value="$Config.{'$harass_bailing_pilots_damage_hull'} == 1">
+              <set_value name="$damageminpercent" exact="100 - $target.pilot.combinedskill"/>
+              <do_if value="$damageminpercent gt 0">
+                <set_object_hull object="$target" min="[$target.hullpercentage, [$damageminpercent, 5].max].min" max="[$target.hullpercentage, [$damageminpercent, 10].max].min"/>
+              </do_if>
+              <do_else>
+                <destroy_object object="$target" explosion="true"/>
+              </do_else>
             </do_if>
-            <do_else>
-              <destroy_object object="$target" explosion="true"/>
-            </do_else>
 
             <!-- If the ship is still alive, destroy some of their componets (Shields excluded to keep compatibility with VRO)-->
-            <!-- TODO: Review this logic -->
-            <do_if value="$target.exists">
-              <add_effect object="$target" effect="$target.scuttleeffect"/>
-              <find_object_component name="$subcomponents" object="$target" class="[class.weapon, class.turret]" multiple="true"/>
-              <shuffle_list list="$subcomponents"/>
-              <do_all exact="[$subcomponents.count, $target.pilot.combinedskill / 10].min" counter="$i" reverse="true">
-                <debug_text text="'destroying %s'.[$subcomponents.{$i}.knownname]" chance="0"/>
-                <destroy_object object="$subcomponents.{$i}" explosion="false"/>
-                <remove_value name="$subcomponents.{$i}"/>
-              </do_all>
+            <do_if value="$Config.{'$harass_bailing_pilots_damage_components'} == 1">
+              <do_if value="$target.exists">
+                <add_effect object="$target" effect="$target.scuttleeffect"/>
+                <find_object_component name="$subcomponents" object="$target" class="[class.weapon, class.turret]" multiple="true"/>
+                <shuffle_list list="$subcomponents"/>
+                <do_all exact="[$subcomponents.count, $target.pilot.combinedskill / 10].min" counter="$i" reverse="true">
+                  <debug_text text="'destroying %s'.[$subcomponents.{$i}.knownname]" chance="0"/>
+                  <destroy_object object="$subcomponents.{$i}" explosion="false"/>
+                  <remove_value name="$subcomponents.{$i}"/>
+                </do_all>
+              </do_if>
             </do_if>
 
             <set_value name="stat.pilots_bailed" operation="add"/>

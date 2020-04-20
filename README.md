@@ -8,16 +8,18 @@ Savegame friendly. (Both adding and removal)
 ## Description
 This mod addresses several piracy gameplay-aspects in X4 that I really dislike.
 
-If you want to force some S/M ship to bail, right-click it, choose "Harass" and follow the instructions.
+If you want to force some S/M ship to bail or soften an L/XL ship before boarding, right-click it, choose "Harass" and follow the instructions.
+
+Also, you can configure it as much as you want usin the in-game menu.
 
 ## Detailed changes explanation
 
 ### Replaced "Surrender!" dialog option by "Harass" contextual action.
 Replaced the confusing and mostly random "Surrender!" dialog option by a more streamlined "Harass" contextual menu action.
 
-If you want to force some S/M ship to bail, right-click it and choose "Harass".
+If you want to force some S/M ship to bail, or soften an L/XL ship before boarding, right-click it and choose "Harass".
 
-That will start a quest, like the one for boarding L/XL ships, but targeted towards S/M ships.
+That will start a quest, follow the steps and the prize will be yours.
 
 ### Removed "Ship type penalty" from the bailing calculation
 Before, you were heavily punished if you were flying a ship with a higher `maxHull` than the enemy you were harassing.
@@ -33,7 +35,10 @@ By default, nobody cared about piracy, you could hijack 1000 ships in front of t
 Now, piracy is a crime, and if you do it enough, people will consider you a criminal.
 
 ### Removed extra damage done when claiming with marines
-Your marines have been instructed to be as careful as you are when claiming ships, so they will no longer cause any extra damage to the ships they claim. 
+Your marines have been instructed to be as careful as you are when claiming ships, so they will no longer cause any extra damage to the ships they claim.
+
+### Added a lot of config options to let you tune the piracy
+Added more than 20 configuration options to let you tune the mod to your likings.
 
 ## Credits
  - vx -> Author of `True Capture`, where a lot of inspiration was drawn.
@@ -42,6 +47,10 @@ Your marines have been instructed to be as careful as you are when claiming ship
  - Smashicons -> Author of the image used as Thumbnail (https://www.flaticon.es/autores/smashicons)
 
 ## Changelog
+### 0.5.0
+ - Improved the "Harass" command vs capital ships, now it will only shoften them.
+ - Added distance checks to the "Harass" command, now you really need to stick on the target.
+ - Added a lot of config options.
 ### 0.4.0
  - Reworked all the "RightClick -> Harass" code, not should work much better.
  - Externalized hard-coded texts to I18N files (English and Spanish).

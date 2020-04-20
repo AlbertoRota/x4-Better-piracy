@@ -43,18 +43,28 @@
       <event_cue_signalled/>
     </conditions>
     <actions>
-      <set_value name="$Target"                    exact="event.param.$object"/>
-      <set_value name="$MissionCue"                exact="Harass_OperationCreated"/>
-      <set_value name="$CurrentPhase"              exact="null"/>
-      <set_value name="$Pressure"                  exact="0"/>
+      <set_value name="$MissionCue"   exact="Harass_OperationCreated"/>
+      <set_value name="$Target"       exact="event.param.$object"/>
+      <set_value name="$Config"       exact="md.Betterpiracy_config.Config.$Config"/>
+      <set_value name="$CurrentPhase" exact="null"/>
+      <set_value name="$Pressure"     exact="0"/>
+      <set_value name="$BailAttepmps" exact="0"/>
+
+      <do_if value="$Target.iscapitalship">
+        <set_value name="$MaxDistance" exact="($Config.{'$keep_pressure_max_distance_lxl'})km"/>
+      </do_if>
+      <do_else>
+        <set_value name="$MaxDistance" exact="($Config.{'$keep_pressure_max_distance_sm'})km"/>
+      </do_else>
 
       <set_value name="$MissionStep_DamageShields" exact="1"/>
       <set_value name="$MissionStep_DamageHull"    exact="2"/>
-      <set_value name="$MissionStep_WaitBailing"   exact="3"/>
-      <set_value name="$MissionStep_ClaimShip"     exact="4"/>
+      <set_value name="$MissionStep_ChaseTarget"   exact="3"/>
+      <set_value name="$MissionStep_WaitBailing"   exact="4"/>
+      <set_value name="$MissionStep_ClaimShip"     exact="5"/>
     </actions>
     <cues>
-      <cue name="Harass_Init" instantiate="true">
+      <cue name="Harass_Init">
         <actions>
             <signal_cue_instantly cue="Harass_ChangePhase" param="'createMission'"/>
         </actions>
@@ -84,15 +94,35 @@
       </library>
       <library name="Harass_CheckShields">
         <actions>
-          <do_if value="$Target.shieldpercentage ge 20">
+          <do_if value="$Target.shieldpercentage ge $Config.{'$harass_shield_threshold'}">
             <signal_cue_instantly cue="Harass_ChangePhase" param="'damageShields'"/>
           </do_if>
         </actions>
       </library>
       <library name="Harass_CheckHull">
         <actions>
-          <do_if value="$Target.hullpercentage ge 75">
+          <do_if value="$BailAttepmps ge $Config.{'$harass_bail_attepmps_before_late'} and $Target.hullpercentage ge $Config.{'$late_harass_hull_threshold'}">
             <signal_cue_instantly cue="Harass_ChangePhase" param="'damageHull'"/>
+          </do_if>
+          <do_elseif value="$BailAttepmps ge $Config.{'$harass_bail_attepmps_before_mid'} and $Target.hullpercentage ge $Config.{'$mid_harass_hull_threshold'}">
+            <signal_cue_instantly cue="Harass_ChangePhase" param="'damageHull'"/>
+          </do_elseif>
+          <do_elseif value="$Target.hullpercentage ge $Config.{'$early_harass_hull_threshold'}">
+            <signal_cue_instantly cue="Harass_ChangePhase" param="'damageHull'"/>
+          </do_elseif>
+        </actions>
+      </library>
+      <library name="Harass_CheckDistance">
+        <actions>
+          <do_if value="player.entity.distanceto.{$Target} gt $MaxDistance">
+            <signal_cue_instantly cue="Harass_ChangePhase" param="'chaseTarget'"/>
+          </do_if>
+        </actions>
+      </library>
+      <library name="Harass_CheckCrew">
+        <actions>
+          <do_if value="$Target.iscapitalship and $Target.people.count le ($Target.people.capacity * ($Config.{'$harass_lxl_min_crew_left_base'} + ($Config.{'$harass_lxl_min_crew_left_pilot'} * ((15 - $Target.pilot.skill.morale)f / 15.0))) / 100)i">
+            <signal_cue_instantly cue="Harass_ChangePhase" param="'claim'"/>
           </do_if>
         </actions>
       </library>
@@ -121,6 +151,9 @@
           <do_elseif value="$TargetPhase == 'damageHull'">
             <signal_cue cue="Harass_DamageHull"/>
           </do_elseif>
+          <do_elseif value="$TargetPhase == 'chaseTarget'">
+            <signal_cue cue="Harass_ChaseTarget"/>
+          </do_elseif>
           <do_elseif value="$TargetPhase == 'waitSurrender'">
             <signal_cue cue="Harass_WaitForSurrender"/>
           </do_elseif>
@@ -142,10 +175,11 @@
 
           <create_mission cue="$MissionCue" name="{61537, 5101}" description="{61537, 5102}" faction="faction.player" type="missiontype.fight">
             <briefing>
-              <objective step="$MissionStep_DamageShields"  action="objective.custom" customaction="{61537, 5103}" text="{61537, 5105}" comment="'Increase pressure: Destroy their shields'"/>
-              <objective step="$MissionStep_DamageHull"     action="objective.custom" customaction="{61537, 5103}" text="{61537, 5106}" comment="'Increase pressure: Damage their hull'"/>
-              <objective step="$MissionStep_WaitBailing"    action="objective.custom" customaction="{61537, 5104}" text="{61537, 5107}" comment="'Maintain pressure: Do not kill the target!'"/>
-              <objective step="$MissionStep_ClaimShip"      action="objective.claim"                               text="{61537, 5108}" comment="'Claim: The ship is empty'"/>
+              <objective step="$MissionStep_DamageShields"  action="objective.custom"   customaction="{61537, 5103}"  text="{61537, 5105}" comment="'Increase pressure: Destroy their shields'"/>
+              <objective step="$MissionStep_DamageHull"     action="objective.custom"   customaction="{61537, 5103}"  text="{61537, 5106}" comment="'Increase pressure: Damage their hull'"/>
+              <objective step="$MissionStep_ChaseTarget"    action="objective.approach"                               text="{61537, 5107}" comment="'Approach: Get closer to your target'"/>
+              <objective step="$MissionStep_WaitBailing"    action="objective.custom"   customaction="{61537, 5104}"  text="{61537, 5108}" comment="'Maintain pressure: Do not kill the target!'"/>
+              <objective step="$MissionStep_ClaimShip"      action="objective.claim"                                  text="{61537, 5109}" comment="'Claim: The ship is empty'"/>
             </briefing>
           </create_mission>
 
@@ -164,14 +198,13 @@
           <cue name="Harass_DamageShields_Check" instantiate="true" checkinterval="1s">
             <actions>
               <include_actions ref="Harass_CheckTarget"/>
-    
-              <set_value name="$TargetShieldMissed" exact="100 - $Target.shieldpercentage"/>
-              <do_if value="$TargetShieldMissed ge 90">
+
+              <do_if value="$Target.shieldpercentage le ($Config.{'$harass_shield_threshold'} - 10)">
                 <signal_cue_instantly cue="Harass_ChangePhase" param="'damageHull'"/>
               </do_if>
               <do_else>
                 <set_objective cue="$MissionCue" step="$MissionStep_DamageShields" action="objective.custom" customaction="{61537, 5103}" text="{61537, 5105}" object="$Target" silent="true">
-                  <progress progress="$TargetShieldMissed" max="90"/>
+                  <progress progress="100 - $Target.shieldpercentage" max="100 - ($Config.{'$harass_shield_threshold'} - 10)"/>
                 </set_objective>
               </do_else>
             </actions>
@@ -192,15 +225,49 @@
               <include_actions ref="Harass_CheckTarget"/>
               <include_actions ref="Harass_CheckShields"/>
     
+              <do_if value="$BailAttepmps ge $Config.{'$harass_bail_attepmps_before_late'}">
+                <set_value name="$MissedHullThreshold" exact="100 - $Config.{'$late_harass_hull_threshold'}"/>
+              </do_if>
+              <do_elseif value="$BailAttepmps ge $Config.{'$harass_bail_attepmps_before_mid'}">
+                <set_value name="$MissedHullThreshold" exact="100 - $Config.{'$mid_harass_hull_threshold'}"/>
+              </do_elseif>
+              <do_else>
+                <set_value name="$MissedHullThreshold" exact="100 - $Config.{'$early_harass_hull_threshold'}"/>
+              </do_else>
+
               <set_value name="$TargetHullMissed" exact="100 - $Target.hullpercentage"/>
-              <do_if value="$TargetHullMissed ge 40">
-                <signal_cue_instantly cue="Harass_ChangePhase" param="'waitSurrender'"/>
+              <do_if value="$TargetHullMissed ge $MissedHullThreshold">
+                <signal_cue_instantly cue="Harass_ChangePhase" param="'chaseTarget'"/>
               </do_if>
               <do_else>
                 <set_objective cue="$MissionCue" step="$MissionStep_DamageHull" action="objective.custom" customaction="{61537, 5103}" text="{61537, 5106}" object="$Target" silent="true">
-                  <progress progress="$TargetHullMissed" max="40"/>
+                  <progress progress="$TargetHullMissed" max="$MissedHullThreshold"/>
                 </set_objective>
               </do_else>
+            </actions>
+          </cue>
+        </cues>
+      </cue>
+
+      <cue name="Harass_ChaseTarget" instantiate="true">
+        <conditions>
+          <event_cue_signalled/>
+        </conditions>
+        <actions>
+          <set_value name="$CurrentPhase" exact="this"/>
+
+          <set_objective cue="$MissionCue" step="$MissionStep_ChaseTarget" action="objective.approach" text="{61537, 5107}" object="$Target" silent="true"/>
+        </actions>
+        <cues>
+          <cue name="Harass_ChaseTarget_Check" instantiate="true" checkinterval="1s">
+            <actions>
+              <include_actions ref="Harass_CheckTarget"/>
+              <include_actions ref="Harass_CheckShields"/>
+              <include_actions ref="Harass_CheckHull"/>
+
+              <do_if value="player.entity.distanceto.{$Target} le $MaxDistance">
+                <signal_cue_instantly cue="Harass_ChangePhase" param="'waitSurrender'"/>
+              </do_if>
             </actions>
           </cue>
         </cues>
@@ -212,24 +279,28 @@
         </conditions>
         <actions>
           <set_value name="$CurrentPhase" exact="this"/>
-          <set_value name="$NextBailCheck" exact="player.age + 5s"/>
+          
+          <set_value name="$NextBailCheck" exact="player.age + ($Config.{'$keep_pressure_timer'})s"/>
           <set_value name="$InitialTimeLeft" exact="$NextBailCheck - player.age"/>
         </actions>
         <cues>
           <cue name="Harass_WaitForSurrender_Check" instantiate="true" checkinterval="1s">
             <actions>
               <include_actions ref="Harass_CheckTarget"/>
+              <include_actions ref="Harass_CheckCrew"/>
               <include_actions ref="Harass_CheckShields"/>
               <include_actions ref="Harass_CheckHull"/>
+              <include_actions ref="Harass_CheckDistance"/>
     
               <set_value name="$CurrentTimeLeft" exact="$NextBailCheck - player.age"/>
-              <set_objective cue="$MissionCue" step="$MissionStep_WaitBailing" action="objective.custom" customaction="{61537, 5104}" text="{61537, 5107}" object="$Target" silent="true">
+              <set_objective cue="$MissionCue" step="$MissionStep_WaitBailing" action="objective.custom" customaction="{61537, 5104}" text="{61537, 5108}" object="$Target" silent="true">
                 <progress progress="$InitialTimeLeft - $CurrentTimeLeft" max="$InitialTimeLeft"/>
               </set_objective>
               
               <do_if value="$CurrentTimeLeft le 0">
-                <set_value name="$NextBailCheck" exact="player.age + 5s"/>
+                <set_value name="$NextBailCheck" exact="player.age + ($Config.{'$keep_pressure_timer'})s"/>
                 <set_value name="$Pressure" operation="add"/>
+                <set_value name="$BailAttepmps" operation="add"/>
                 <signal_cue_instantly cue="md.Betterpiracy_custom_bail_logic.PlayerOwnedShipHarass" param="$MissionCue"/>
               </do_if>
             </actions>
@@ -244,12 +315,17 @@
         <actions>
           <set_value name="$CurrentPhase" exact="this"/>
 
-          <set_objective cue="$MissionCue" step="$MissionStep_ClaimShip" action="objective.claim" text="{61537, 5108}" object="$Target" silent="true"/>
+          <do_if value="$Target.iscapitalship">
+            <set_objective cue="$MissionCue" step="$MissionStep_ClaimShip" action="objective.board" text="{61537, 5110}" object="$Target" silent="true"/>
+          </do_if>
+          <do_else>
+            <set_objective cue="$MissionCue" step="$MissionStep_ClaimShip" action="objective.claim" text="{61537, 5109}" object="$Target" silent="true"/>
+          </do_else>
         </actions>
         <cues>
           <cue name="Harass_Claim_Check" instantiate="true" checkinterval="1s">
             <actions>
-              <do_if value="$Target.owner == faction.player">
+              <do_if value="$Target.owner == faction.player or not $Target.isoperational">
                 <signal_cue_instantly cue="Harass_ChangePhase" param="'finish'"/>
               </do_if>
             </actions>

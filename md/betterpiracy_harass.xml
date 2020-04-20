@@ -64,7 +64,7 @@
       <set_value name="$MissionStep_ClaimShip"     exact="5"/>
     </actions>
     <cues>
-      <cue name="Harass_Init" instantiate="true">
+      <cue name="Harass_Init">
         <actions>
             <signal_cue_instantly cue="Harass_ChangePhase" param="'createMission'"/>
         </actions>
@@ -121,7 +121,7 @@
       </library>
       <library name="Harass_CheckCrew">
         <actions>
-          <do_if value="$Target.iscapitalship and $Target.people.count le ($target.people.capacity * ($Config.{'$harass_lxl_min_crew_left_base'} + ($Config.{'$harass_lxl_min_crew_left_pilot'} * ((15 - $Target.pilot.skill.morale)f / 15.0))) / 100)i">
+          <do_if value="$Target.iscapitalship and $Target.people.count le ($Target.people.capacity * ($Config.{'$harass_lxl_min_crew_left_base'} + ($Config.{'$harass_lxl_min_crew_left_pilot'} * ((15 - $Target.pilot.skill.morale)f / 15.0))) / 100)i">
             <signal_cue_instantly cue="Harass_ChangePhase" param="'claim'"/>
           </do_if>
         </actions>

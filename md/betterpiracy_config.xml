@@ -154,7 +154,7 @@
             $name       = {61537, 5165},
             $mouseover  = {61537, 5166},
             $type       = 'slidercell',
-            $default    = 2,
+            $default    = 3,
             $args       = table[$min = 0, $max = 15, $suffix = 'km'],
             $callback   = OnChange
           ]"
@@ -167,7 +167,7 @@
             $name       = {61537, 5167},
             $mouseover  = {61537, 5168},
             $type       = 'slidercell',
-            $default    = 4,
+            $default    = 6,
             $args       = table[$min = 0, $max = 30, $suffix = 'km'],
             $callback   = OnChange
           ]"

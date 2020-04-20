@@ -16,11 +16,14 @@
       <check_value value="@$target.order.state != orderstate.critical"/>
     </conditions>
     <actions>
-      <set_value name="$MissionCue" exact="event.param"/>
-      <set_value name="$target" exact="$MissionCue.$Target"/>
-      <set_value name="$targetEffectiveMorale" exact="[$target.pilot.skill.morale - $MissionCue.$Pressure, 0].max"/>
-      <set_value name="$attacker" exact="player.occupiedship"/>
-      <set_value name="$isPlayerInvolved" exact="player.sector.knownname == $target.sector.knownname"/>
+      <set_value name="$MissionCue"             exact="event.param"/>
+      <set_value name="$target"                 exact="$MissionCue.$Target"/>
+      <set_value name="$Config"                 exact="md.Betterpiracy_config.Config.$Config"/>
+
+      <set_value name="$targetEffectiveMorale"  exact="[$target.pilot.skill.morale - ($MissionCue.$Pressure * $Config.{'$pressure_buildup_rate'})i, 0].max"/>
+      <set_value name="$attacker"               exact="player.occupiedship"/>
+      <set_value name="$isPlayerInvolved"       exact="player.sector.knownname == $target.sector.knownname"/>
+      
       <debug_text text="'Harass bail check: %s %s forcing %s %s to bail.'.[$attacker.idcode, $attacker.knownname, $target.idcode, $target.knownname]"/>
       
       <!-- Determine how many (If any) crew members are going to bail -->

@@ -43,8 +43,8 @@
       <event_cue_signalled/>
     </conditions>
     <actions>
-      <set_value name="$Target"       exact="event.param.$object"/>
       <set_value name="$MissionCue"   exact="Harass_OperationCreated"/>
+      <set_value name="$Target"       exact="event.param.$object"/>
       <set_value name="$Config"       exact="md.Betterpiracy_config.Config.$Config"/>
       <set_value name="$CurrentPhase" exact="null"/>
       <set_value name="$Pressure"     exact="0"/>

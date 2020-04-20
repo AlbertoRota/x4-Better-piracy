@@ -8,7 +8,7 @@ Savegame friendly. (Both adding and removal)
 ## Description
 This mod addresses several piracy gameplay-aspects in X4 that I really dislike.
 
-If you want to force some S/M ship to bail, right-click it, choose "Harass" and follow the instructions.
+If you want to force some S/M ship to bail or soften an L/XL ship before boarding, right-click it, choose "Harass" and follow the instructions.
 
 Also, you can configure it as much as you want usin the in-game menu.
 

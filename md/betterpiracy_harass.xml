@@ -119,6 +119,13 @@
           </do_if>
         </actions>
       </library>
+      <library name="Harass_CheckCrew">
+        <actions>
+          <do_if value="$Target.iscapitalship and $Target.people.count le ($target.people.capacity * ($Config.{'$harass_lxl_min_crew_left_base'} + ($Config.{'$harass_lxl_min_crew_left_pilot'} * ((15 - $Target.pilot.skill.morale)f / 15.0))) / 100)i">
+            <signal_cue_instantly cue="Harass_ChangePhase" param="'claim'"/>
+          </do_if>
+        </actions>
+      </library>
       <!-- Library - END -->
 
       <!-- Utility cue to change between phases -->
@@ -280,6 +287,7 @@
           <cue name="Harass_WaitForSurrender_Check" instantiate="true" checkinterval="1s">
             <actions>
               <include_actions ref="Harass_CheckTarget"/>
+              <include_actions ref="Harass_CheckCrew"/>
               <include_actions ref="Harass_CheckShields"/>
               <include_actions ref="Harass_CheckHull"/>
               <include_actions ref="Harass_CheckDistance"/>
@@ -307,12 +315,17 @@
         <actions>
           <set_value name="$CurrentPhase" exact="this"/>
 
-          <set_objective cue="$MissionCue" step="$MissionStep_ClaimShip" action="objective.claim" text="{61537, 5109}" object="$Target" silent="true"/>
+          <do_if value="$Target.iscapitalship">
+            <set_objective cue="$MissionCue" step="$MissionStep_ClaimShip" action="objective.board" text="{61537, 5110}" object="$Target" silent="true"/>
+          </do_if>
+          <do_else>
+            <set_objective cue="$MissionCue" step="$MissionStep_ClaimShip" action="objective.claim" text="{61537, 5109}" object="$Target" silent="true"/>
+          </do_else>
         </actions>
         <cues>
           <cue name="Harass_Claim_Check" instantiate="true" checkinterval="1s">
             <actions>
-              <do_if value="$Target.owner == faction.player">
+              <do_if value="$Target.owner == faction.player or not $Target.isoperational">
                 <signal_cue_instantly cue="Harass_ChangePhase" param="'finish'"/>
               </do_if>
             </actions>

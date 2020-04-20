@@ -1,0 +1,2 @@
+// Update mod in SteamWorkshop. (Remember to add a proper change note)
+WorkshopTool update -path "..\X4 Foundations\extensions\better_piracy" -buildcat -changenote ""

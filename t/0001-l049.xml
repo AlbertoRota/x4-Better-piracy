@@ -42,11 +42,11 @@
     <t id="5174">(Harass L/XL min crew left - Pilot mouseover)Percentage to be added to "Harass L/XL min crew left - Base" depending of the pilot morale, a 5 star pilot will add 100% of the specified value, a 0 star pilot will add nothing.\n\n"Pressure" points do NOT affect this.</t>
     <t id="5175">(Harass base bail chance name)Harass base bail chance</t>
     <t id="5176">(Harass base bail chance mouseover)Percentage of harass bail checks that will pass in the best-case scenario.\n\nIt will be reduced by several factors, such a pilot morale, etc.</t>
-    <t id="5177">(Harass base bail number name)Harass base bail chance</t>
+    <t id="5177">(Harass base bail number name)Harass base bail number</t>
     <t id="5178">(Harass base bail number mouseover)Percentage of the current crew that will bail in the best-case scenario when a harass bail check passes.\n\nIt will be reduced by several factors, such a pilot morale, etc.</t>
     <t id="5179">(Harass reputation hit name)Harass reputation hit</t>
     <t id="5180">(Harass reputation hit mouseover)When enabled, sucssesfull "Harass" operations will decrease your reputation with the pilots faction.\n\nThe logic applied to determine if it happens is the same than when you board an L/XL ship.</t>
-    <t id="5181">(Harass bailing pilots damage hull name)Harass reputation hit</t>
+    <t id="5181">(Harass bailing pilots damage hull name)Harass bailing pilots damage hull</t>
     <t id="5182">(Harass bailing pilots damage hull mouseover)When enabled, after sucssesfull "Harass" operations the bailing pilot will further damage the ship.\n\nThe damage inflicted is proportional to the pilot morale.</t>
     <t id="5183">(Harass bailing pilots destroy components name)Harass bailing pilots destroy components</t>
     <t id="5184">(Harass bailing pilots destroy components mouseover)When enabled, after sucssesfull "Harass" operations the bailing pilot will destroy some of the ship componets.\n\nThe number of componets destroyed is proportional to the pilot morale, but shields are never destroyed.</t>
@@ -54,7 +54,7 @@
     <t id="5186">(Combat base bail chance mouseover)Percentage of combat bail checks that will pass in the best-case scenario.\n\nIt will be reduced by several factors, such a pilot morale, etc.</t>
     <t id="5187">(Combat reputation hit name)Combat reputation hit</t>
     <t id="5188">(Combat reputation hit mouseover)When enabled, shooting a target until it bails will decrease your reputation with the pilots faction.\n\nThe logic applied to determine if it happens is the same than when you board an L/XL ship.</t>
-    <t id="5189">(Combat bailing pilots damage hull name)Combat reputation hit</t>
+    <t id="5189">(Combat bailing pilots damage hull name)Combat bailing pilots damage hull</t>
     <t id="5190">(Combat bailing pilots damage hull mouseover)When enabled, after shooting a target until it bails the bailing pilot will further damage the ship.\n\nThe damage inflicted is proportional to the pilot morale.</t>
     <t id="5191">(Combat bailing pilots destroy components name)Combat bailing pilots destroy components</t>
     <t id="5192">(Combat bailing pilots destroy components mouseover)When enabled, after after shooting a target until it bails the bailing pilot will destroy some of the ship componets.\n\nThe number of componets destroyed is proportional to the pilot morale.</t>

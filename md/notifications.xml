@@ -6,7 +6,7 @@
 		<!-- Sightly lowered the base chance to happen to make the "Harass" command more attractive -->
 		<set_value
 			name="$ejectchance"
-			exact="( (md.Betterpiracy_config.Config.$Config.{$combat_base_bail_chance} - $target.combinedskill / 5) * [(($attacker.shieldpercentage + $attacker.hullpercentage) / [($target.shieldpercentage + $target.hullpercentage), 1.0].max), 1.0].min )i"
+			exact="( (md.Betterpiracy_config.Config.$Config.{'$combat_base_bail_chance'} - $target.combinedskill / 5) * [(($attacker.shieldpercentage + $attacker.hullpercentage) / [($target.shieldpercentage + $target.hullpercentage), 1.0].max), 1.0].min )i"
 		/>
 	</replace>
 	
@@ -30,12 +30,12 @@
 		</do_if>
 
 		<!-- Remove extra damage to hull -->
-		<do_if value="md.Betterpiracy_config.Config.$Config.{$combat_bailing_pilots_damage_hull} == 0">
+		<do_if value="md.Betterpiracy_config.Config.$Config.{'$combat_bailing_pilots_damage_hull'} == 0">
 			<set_value name="$damageminpercent" exact="100"/>
 		</do_if>
 	</add>
 
 	<!-- This selector matches line 1022 -->
 	<!-- Remove extra damage to components -->
-	<replace sel="//do_if[@value='$pilotbail?']/do_if[@value='$target.exists']/@value">md.Betterpiracy_config.Config.$Config.{$combat_bailing_pilots_destroy_components} == 1 and $target.exists</replace>
+	<replace sel="//do_if[@value='$pilotbail?']/do_if[@value='$target.exists']/@value">md.Betterpiracy_config.Config.$Config.{'$combat_bailing_pilots_destroy_components'} == 1 and $target.exists</replace>
 </diff>

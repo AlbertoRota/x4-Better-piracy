@@ -301,6 +301,7 @@
                 <set_value name="$NextBailCheck" exact="player.age + ($Config.{'$keep_pressure_timer'})s"/>
                 <set_value name="$Pressure" operation="add"/>
                 <set_value name="$BailAttepmps" operation="add"/>
+                <speak actor="player.computer" page="61538" line="[4401, 4402, 4403, 4404, 4405, 4406, 4407, 4408, 4409].random" priority="90"/>
                 <signal_cue_instantly cue="md.Betterpiracy_custom_bail_logic.PlayerOwnedShipHarass" param="$MissionCue"/>
               </do_if>
             </actions>

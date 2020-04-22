@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<diff>
+  <add sel="/soundlibrary">
+	<sound id="61538_normal" description="Better piracy - Threats" repeat="1" is3d="1" preload="0">
+		<sample start="extensions\better_piracy\voice\61538\normal" />
+		<volume start="3" distance="1"/>
+		<effects>
+			<filter mode="bandpass" frequency="0.26" oneoverq="1.45" />
+			<reverb room="sewer pipe" roomsize="10" drymix="5" density="90" />
+		</effects>
+	</sound>
+	<sound id="61538_comm" description="Better piracy - Threats" repeat="1" is3d="1" preload="0">
+		<sample start="extensions\better_piracy\voice\61538\normal" />
+		<volume start="3" distance="1"/>
+		<effects>
+			<filter mode="bandpass" frequency="0.26" oneoverq="1.45" />
+			<reverb room="sewer pipe" roomsize="10" drymix="5" density="90" />
+		</effects>
+	</sound>
+  </add>
+</diff>

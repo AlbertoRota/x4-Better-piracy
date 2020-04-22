@@ -45,8 +45,12 @@ Added more than 20 configuration options to let you tune the mod to your likings
  - Kevrlet -> Author of `FixBailChance`, where a lot of inspiration was drawn.
  - SirNukes -> Author of `SirNukes Mod Support APIs`.
  - Smashicons -> Author of the image used as Thumbnail (https://www.flaticon.es/autores/smashicons)
+ - https://text2voice.org, https://twistedwave.com/online and https://voicechanger.io/ -> All of them used to create the custom dialog lines.
 
 ## Changelog
+### 0.6.0
+ - Added custom dialog lines during harass operation, now you know that you are threatening them.
+ - Minor fixes
 ### 0.5.0
  - Improved the "Harass" command vs capital ships, now it will only shoften them.
  - Added distance checks to the "Harass" command, now you really need to stick on the target.

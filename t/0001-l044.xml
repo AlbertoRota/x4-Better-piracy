@@ -59,4 +59,15 @@
     <t id="5191">(Combat bailing pilots destroy components name)Combat bailing pilots destroy components</t>
     <t id="5192">(Combat bailing pilots destroy components mouseover)When enabled, after after shooting a target until it bails the bailing pilot will destroy some of the ship componets.\n\nThe number of componets destroyed is proportional to the pilot morale.</t>
   </page>
+  <page id="61538" title="Better piracy voices" descr="0" voice="yes">
+    <t id="4401">The battle is over, abandon your ship immediately!</t>
+    <t id="4402">We are just interested in the ship. Make it easy and surrender now!</t>
+    <t id="4403">You have only two options now, surrender or prepare to die!</t>
+    <t id="4404">We are going to board the ship. You don't want to be inside when that happens!</t>
+    <t id="4405">You stand no chance, be smart, and surrender.</t>
+    <t id="4406">Are you really willing to die? No? Then get out of the ship!</t>
+    <t id="4407">You are not going to make it out with your ship, but you can still make it out alive.</t>
+    <t id="4408">You have already proved your courage, now prove your wisdom and surrender!</t>
+    <t id="4409">Your stubbornness will end up killing you. Surrender now!</t>
+  </page>
 </language>

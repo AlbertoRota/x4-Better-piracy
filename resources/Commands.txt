@@ -1,2 +1,11 @@
 // Update mod in SteamWorkshop. (Remember to add a proper change note)
 WorkshopTool update -path "..\X4 Foundations\extensions\better_piracy" -buildcat -changenote ""
+
+// Workflow to generate new audio lines
+1) https://text2voice.org
+    -> English: Joanna, Female
+2) https://twistedwave.com/online
+    -> Normalize all audio with "Effects -> Normalize... -> RMS value"
+    -> Export as "WAVE audio -> 16 bits"
+3) https://voicechanger.io/
+    -> Use the "Dalek"

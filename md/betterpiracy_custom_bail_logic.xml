@@ -15,6 +15,7 @@
       <check_value value="not $target.islasertower"/>
       <check_value value="@$target.order.state != orderstate.critical"/>
     </conditions>
+    <delay exact="5s"/>
     <actions>
       <set_value name="$MissionCue"             exact="event.param"/>
       <set_value name="$target"                 exact="$MissionCue.$Target"/>

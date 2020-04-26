@@ -20,12 +20,12 @@
     <t id="5152">(Harass shield threshold mouseover)(Harass shield threshold mouseover)Pendant l'opération de harcèlement, si le % de bouclier de la cible est supérieur à cette valeur, l'opération retournera à l'étape "Réduisez leur bouclier".\n\nL'étape "Réduisez leur bouclier" se termine 10% sous cette valeur.</t>
     <t id="5153">(Early harass hull threshold name)Harcèlement - 1ère phase - Seuil coque</t>
     <t id="5154">(Early harass hull threshold mouseover)Pendant la 1ère phase de l'opération de harcèlement, si le % de coque de la cible est supérieur à cette valeur, l'opération retournera à l'étape "Endommagez leur coque".</t>
-    <t id="5155">(Harass bail attepmps before mid name)Harcèlement - 1ère phase - Nombre de tentatives d'abandon de vaisseau</t>
-    <t id="5156">(Harass bail attepmps before mid mouseover)Une fois ce nombre de tentatives atteint pendant la 1ère phase, l'opération passe à la 2ème phase.</t>
+    <t id="5155">(Harass bail attemps before mid name)Harcèlement - 1ère phase - Nombre de tentatives d'abandon de vaisseau</t>
+    <t id="5156">(Harass bail attemps before mid mouseover)Une fois ce nombre de tentatives atteint pendant la 1ère phase, l'opération passe à la 2ème phase.</t>
     <t id="5157">(Mid harass hull threshold name)Harcèlement - 2ème phase - Seuil coque</t>
     <t id="5158">(Mid harass hull threshold mouseover)Pendant la 2ème phase de l'opération de harcèlement, si le % de coque de la cible est supérieur à cette valeur, l'opération retournera à l'étape "Endommagez leur coque".</t>
-    <t id="5159">(Harass bail attepmps before late name)Harcèlement - 2ème phase - Nombre de tentatives d'abandon de vaisseau</t>
-    <t id="5160">(Harass bail attepmps before late mouseover)Une fois ce nombre de tentatives atteint pendant la 2ème phase, l'opération passe à la 3ème phase.</t>
+    <t id="5159">(Harass bail attemps before late name)Harcèlement - 2ème phase - Nombre de tentatives d'abandon de vaisseau</t>
+    <t id="5160">(Harass bail attemps before late mouseover)Une fois ce nombre de tentatives atteint pendant la 2ème phase, l'opération passe à la 3ème phase.</t>
     <t id="5161">(Late harass hull threshold name)Harcèlement - 3ème phase - Seuil coque</t>
     <t id="5162">(Late harass hull threshold mouseover)Pendant la 3ème phase de l'opération de harcèlement, si le % de coque de la cible est supérieur à cette valeur, l'opération retournera à l'étape "Endommagez leur coque".</t>
     <t id="5163">(Keep pressure timer name)Harcèlement - Temps de pression</t>

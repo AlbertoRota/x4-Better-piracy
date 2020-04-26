@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <mdscript name="Betterpiracy_config" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://x4libonline.ddns.net/libraries/md.xsd">
   <cues>
+    <!-- TODO: Replace "attepmps" by "attemps". -->
+
     <cue name="Config">
       <actions>
         <include_actions ref="Reset_Config"/>

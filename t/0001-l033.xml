@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- Specific language file: applies to French only -->
+<language id="33">
+  <page id="61537" title="Better piracy texts" descr="0" voice="no">
+    <!-- Harass mission related texts -->
+    <t id="5100">Harceler</t>
+    <t id="5101">(Harass mission title)Harcèlement </t>
+    <t id="5102">(Harass mission description)Aide à l'abordage des vaisseaux. </t>
+    <t id="5103">(Increase pressure objective)Augmentez la pression </t>
+    <t id="5104">(Maintain pressure objective)Maintenez la pression </t>
+    <t id="5105">(Damage shields)Réduisez leur bouclier </t>
+    <t id="5106">(Damage hull)Endommagez leur coque </t>
+    <t id="5107">(Approach)Approchez-vous de la cible </t>
+    <t id="5108">(Keep pressing)Ne détruisez pas la cible ! </t>
+    <t id="5109">(Claim)Le vaisseau a été abandonné </t>
+    <t id="5110">(Board)Débutez l'abordage </t>
+    <!-- Config related texts -->
+    <t id="5150">(Menu category)Better piracy</t>
+    <t id="5151">(Harass shield threshold name)Harcèlement - Seuil bouclier</t>
+    <t id="5152">(Harass shield threshold mouseover)(Harass shield threshold mouseover)Pendant l'opération de harcèlement, si le % de bouclier de la cible est supérieur à cette valeur, l'opération retournera à l'étape "Réduisez leur bouclier".\n\nL'étape "Réduisez leur bouclier" se termine 10% sous cette valeur.</t>
+    <t id="5153">(Early harass hull threshold name)Harcèlement - 1ère phase - Seuil coque</t>
+    <t id="5154">(Early harass hull threshold mouseover)Pendant la 1ère phase de l'opération de harcèlement, si le % de coque de la cible est supérieur à cette valeur, l'opération retournera à l'étape "Endommagez leur coque".</t>
+    <t id="5155">(Harass bail attemps before mid name)Harcèlement - 1ère phase - Nombre de tentatives d'abandon de vaisseau</t>
+    <t id="5156">(Harass bail attemps before mid mouseover)Une fois ce nombre de tentatives atteint pendant la 1ère phase, l'opération passe à la 2ème phase.</t>
+    <t id="5157">(Mid harass hull threshold name)Harcèlement - 2ème phase - Seuil coque</t>
+    <t id="5158">(Mid harass hull threshold mouseover)Pendant la 2ème phase de l'opération de harcèlement, si le % de coque de la cible est supérieur à cette valeur, l'opération retournera à l'étape "Endommagez leur coque".</t>
+    <t id="5159">(Harass bail attemps before late name)Harcèlement - 2ème phase - Nombre de tentatives d'abandon de vaisseau</t>
+    <t id="5160">(Harass bail attemps before late mouseover)Une fois ce nombre de tentatives atteint pendant la 2ème phase, l'opération passe à la 3ème phase.</t>
+    <t id="5161">(Late harass hull threshold name)Harcèlement - 3ème phase - Seuil coque</t>
+    <t id="5162">(Late harass hull threshold mouseover)Pendant la 3ème phase de l'opération de harcèlement, si le % de coque de la cible est supérieur à cette valeur, l'opération retournera à l'étape "Endommagez leur coque".</t>
+    <t id="5163">(Keep pressure timer name)Harcèlement - Temps de pression</t>
+    <t id="5164">(Keep pressure timer mouseover)Pendant l'opération de harcèlement, temps nécessaire pour chaque étape "Maintenez la pression". Une fois ce temps écoulé, une vérification de tentative d'abandon du vaisseau est effectuée et un point de pression est ajouté au pilote.</t>
+    <t id="5165">(Keep pressure max distance - S/M name)Harcèlement - S/M - Distance maximum de maintien de la pression</t>
+    <t id="5166">(Keep pressure max distance - S/M mouseover)Pendant l'opération de harcèlement sur des vaisseaux de classe S/M, l'étape "Maintenez la pression" augmentera uniquement si la cible est située à une distance inférieur à cette valeur. Si la cible est plus loin que cette distance, l'opération retournera à l'étape "Approchez-vous de la cible".</t>
+    <t id="5167">(Keep pressure max distance - L/XL name)Harcèlement - L/XL - Distance maximum de maintien de la pression</t>
+    <t id="5168">(Keep pressure max distance - L/XL mouseover)Pendant l'opération de harcèlement sur des vaisseaux de classe L/XL, l'étape "Maintenez la pression" augmentera uniquement si la cible est située à une distance inférieur à cette valeur. Si la cible est plus loin que cette distance, l'opération retournera à l'étape "Approchez-vous de la cible".</t>
+    <t id="5169">(Pressure build-up rate name)Harcèlement - Taux d'augmentation de la pression</t>
+    <t id="5170">(Pressure build-up rate mouseover)Effet de chaque point de pression sur le moral du pilote.\n\nUn point de pression est ajouté après chaque cycle de "Maintenez la pression".</t>
+    <t id="5171">(Harass L/XL min crew left - Base name)Harcèlement - L/XL - Equipage minimum - Base</t>
+    <t id="5172">(Harass L/XL min crew left - Base mouseover)Pendant l'opération de harcèlement sur des vaisseaux de classe L/XL, si le nombre de membres d'équipage restant est inférieur à cette valeur, l'opération passera à l'étape "Débutez l'abordage".</t>
+    <t id="5173">(Harass L/XL min crew left - Pilot name)Harcèlement - L/XL - Equipage minimum - Effet du pilote</t>
+    <t id="5174">(Harass L/XL min crew left - Pilot mouseover)Valeur à ajouter à la valeur "Harcèlement - L/XL - Equipage minimum - Base" en fonction des compétences du pilote.\n\nUn pilote 5 étoiles ajoute 100% de cette valeur tandis qu'un pilote 0 étoile n'ajoute rien.\n\nLes points de pression n'affecte pas cette valeur.</t>
+    <t id="5175">(Harass base bail chance name)Harcèlement - Chance d'abandon de vaisseau - Base</t>
+    <t id="5176">(Harass base bail chance mouseover)Pourcentage de succès des tentatives d'abandon de vaisseau dans le meilleur des cas.\n\nCette valeur est réduite par de nombreux facteurs, comme le moral du pilote, etc.</t>
+    <t id="5177">(Harass base bail number name)Harcèlement - Nombre de membres abandonnant le vaisseau</t>
+    <t id="5178">(Harass base bail number mouseover)Pourcentage de l'équipage restant abandonnant le vaisseau après une tentative réussie d'abandon de vaisseau dans le meilleur des cas.\n\nCette valeur est réduite par de nombreux facteurs, comme le moral du pilote, etc.</t>
+    <t id="5179">(Harass reputation hit name)Harcèlement - Effet sur la réputation</t>
+    <t id="5180">(Harass reputation hit mouseover)Si activé, les opérations réussi de harcèlement réduiront votre réputation auprès de la faction du pilote.\n\nLa logique d'application de la réputation est la même que lors d'un abordage d'un vaisseau de classe L/XL.</t>
+    <t id="5181">(Harass bailing pilots damage hull name)Harcèlement - Sabotage du vaisseau</t>
+    <t id="5182">(Harass bailing pilots damage hull mouseover)Si activé, le pilote endomagera le vaisseau lors de l'abandon.\n\nLes dommages infligés sont proportionnels au moral du pilote.</t>
+    <t id="5183">(Harass bailing pilots destroy components name)Harcèlement - Sabotage des composants du vaisseau</t>
+    <t id="5184">(Harass bailing pilots destroy components mouseover)Si activé, le pilote détruiera les composants du vaisseau lors de l'abandon.\n\nLe nombre de composants détruits est proportionnel au moral du pilote.\n\nLes boucliers ne sont jamais détruits</t>
+    <t id="5185">(Combat base bail chance name)Combat - Chance d'abandon de vaisseau</t>
+    <t id="5186">(Combat base bail chance mouseover)Pourcentage de succès des tentatives d'abandon de vaisseau, en combat normal, dans le meilleur des cas.\n\nCette valeur est réduite par de nombreux facteurs, comme le moral du pilote, etc.</t>
+    <t id="5187">(Combat reputation hit name)Combat - Effet sur la réputation</t>
+    <t id="5188">(Combat reputation hit mouseover)Si activé, attaquer un vaisseau jusqu'à son abandon aura un impact sur votre réputation.\n\nLa logique d'application de la réputation est la même que lors d'un abordage d'un vaisseau de classe L/XL.</t>
+    <t id="5189">(Combat bailing pilots damage hull name)Combat - Sabotage du vaisseau</t>
+    <t id="5190">(Combat bailing pilots damage hull mouseover)Si activé, le pilote endomagera le vaisseau lors de l'abandon.\n\nLes dommages infligés sont proportionnels au moral du pilote.</t>
+    <t id="5191">(Combat bailing pilots destroy components name)Combat - Sabotage des composants du vaisseau</t>
+    <t id="5192">(Combat bailing pilots destroy components mouseover)Si activé, le pilote détruiera les composants du vaisseau lors de l'abandon.\n\nLe nombre de composants détruits est proportionnel au moral du pilote.</t>
+  </page>
+  <page id="61538" title="Better piracy voices" descr="0" voice="yes">
+    <t id="4401">La bataille est terminée ! Abandonnez votre vaisseau immédiatement !</t>
+    <t id="4402">Nous voulons seulement le vaisseau. Ne compliquez pas les choses et rendez-vous !</t>
+    <t id="4403">Vous n'avez que 2 options, rendez-vous ou préparez-vous à mourir !</t>
+    <t id="4404">Nous allons aborder votre vaisseau ! Vous ne voudriez quand même pas croiser notre chemin...</t>
+    <t id="4405">Vous n'avez aucune chance ! Réflechissez et rendez-vous.</t>
+    <t id="4406">Vous voulez vraiment mourir ? Non ? Alors sortez de ce vaisseau !</t>
+    <t id="4407">Vous ne pourrez pas vous enfuir avec votre vaisseau, mais vous pouvez toujours vous enfuir sans lui...</t>
+    <t id="4408">Vous avez déjà prouvé votre courage, maintenant prouvez votre sagesse et rendez-vous !</t>
+    <t id="4409">Votre entêtement finira par vous tuer. Rendez-vous maintenant !</t>
+  </page>
+</language>

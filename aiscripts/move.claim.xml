@@ -4,4 +4,21 @@
 	<!-- This selector matches lines 106 and 207 -->
 	<remove sel="/aiscript/attention[@min='unknown']/actions/do_if[4]/do_if[1]"/>
 	<remove sel="/aiscript/attention[@min='visible']/actions/do_if[5]/do_if[1]"/>
+
+	<!-- Avoid having marines looping arround the target -->
+	<!-- This selector matches lines 59 -->
+	<replace sel="//move_to[@flightbehaviour='flightbehaviour.droneattach']">
+		<move_to
+			destination="$target"
+			object="this.ship"
+			uselocalhighways="false"
+			forcesteering="true"
+		>
+			<interrupt>
+				<conditions>
+					<event_object_approaching_waypoint object="this.ship"/>
+				</conditions>
+			</interrupt>
+		</move_to>
+	</replace>
 </diff>

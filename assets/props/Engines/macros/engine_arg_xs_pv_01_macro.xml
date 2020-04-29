@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<diff>
+  <add sel="//properties">
+    <travel charge="1" thrust="18" attack="45" release="30" />
+  </add>
+</diff>

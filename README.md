@@ -35,7 +35,7 @@ By default, nobody cared about piracy, you could hijack 1000 ships in front of t
 Now, piracy is a crime, and if you do it enough, people will consider you a criminal.
 
 ### Removed boarding pods orbiting ship when using marines to claim a ship
-When using marines to claim a ship, they will no longer endlessly orbit it.
+When using marines to claim a ship, they will use the "Travel drive" to get closer and they will no longer endlessly orbit it.
 
 ### Removed extra damage done when claiming with marines
 Your marines have been instructed to be as careful as you are when claiming ships, so they will no longer cause any extra damage to the ships they claim.
@@ -51,6 +51,9 @@ Added more than 20 configuration options to let you tune the mod to your likings
  - https://text2voice.org, https://twistedwave.com/online and https://voicechanger.io/ -> All of them used to create the custom dialog lines.
 
 ## Changelog
+### 0.8.0
+ - When using marines to claim a ship, the boarding pod will use the travel drive
+ - Improved logic to avoid having boarding pods orbiting ship when using marines to claim a ship
 ### 0.7.0
  - Removed boarding pods orbiting ship when using marines to claim a ship
  - Added German translation

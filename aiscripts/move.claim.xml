@@ -6,19 +6,28 @@
 	<remove sel="/aiscript/attention[@min='visible']/actions/do_if[5]/do_if[1]"/>
 
 	<!-- Avoid having marines looping arround the target -->
-	<!-- This selector matches lines 59 -->
-	<replace sel="//move_to[@flightbehaviour='flightbehaviour.droneattach']">
+	<!-- This selector matches lines 31 -->
+	<replace sel="//move_to[@flightbehaviour='flightbehaviour.default']">
 		<move_to
 			destination="$target"
 			object="this.ship"
 			uselocalhighways="false"
-			forcesteering="true"
+			forcesteering="false"
+			finishonapproach="false"
+			travel="true"
+			flightbehaviour="flightbehaviour.generic"
 		>
 			<interrupt>
 				<conditions>
-					<event_object_approaching_waypoint object="this.ship"/>
+					<event_object_collided object="this.ship" otherobject="$target"/>
 				</conditions>
 			</interrupt>
 		</move_to>
+		<stop_moving object="this.ship"/>
+		<resume label="better_piracy_skip"/>
 	</replace>
+	<!-- This selector matches lines 66 -->
+	<add sel="//attach_object_to_target" pos="before">
+		<label name="better_piracy_skip"/>
+	</add>
 </diff>

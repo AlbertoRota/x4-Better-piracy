@@ -51,6 +51,8 @@ Added more than 20 configuration options to let you tune the mod to your likings
  - https://text2voice.org, https://twistedwave.com/online and https://voicechanger.io/ -> All of them used to create the custom dialog lines.
 
 ## Changelog
+### 0.9.0
+ - Improved logic to avoid having boarding pods orbiting ship when using marines to claim a ship
 ### 0.8.0
  - When using marines to claim a ship, the boarding pod will use the travel drive
  - Improved logic to avoid having boarding pods orbiting ship when using marines to claim a ship

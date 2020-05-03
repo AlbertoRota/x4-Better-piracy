@@ -2,12 +2,16 @@
 <diff>
 	<!-- Remove all the hull and component damage caused by "Marine claiming" -->
 	<!-- This selector matches lines 106 and 207 -->
-	<remove sel="/aiscript/attention[@min='unknown']/actions/do_if[4]/do_if[1]"/>
-	<remove sel="/aiscript/attention[@min='visible']/actions/do_if[5]/do_if[1]"/>
+	<remove sel="/aiscript/attention[@min='unknown']/actions/do_if[@value='this.ship == $target']/do_if[@value='$damagemaxpercent lt 100']"/>
+	<remove sel="/aiscript/attention[@min='visible']/actions/do_if[@value='this.ship == $target']/do_if[@value='$damagemaxpercent lt 100']"/>
 
 	<!-- Avoid having marines looping arround the target -->
 	<!-- This selector matches lines 31 -->
-	<replace sel="//move_to[@flightbehaviour='flightbehaviour.default']">
+	<add sel="//move_to[@flightbehaviour='flightbehaviour.default']" type="@chance">0</add>
+	<!-- This selector matches lines 43 -->
+	<remove sel="//disable_collision_response"/>
+	<!-- This selector matches lines 59 -->
+	<replace sel="//move_to[@flightbehaviour='flightbehaviour.droneattach']">
 		<move_to
 			destination="$target"
 			object="this.ship"
@@ -24,10 +28,5 @@
 			</interrupt>
 		</move_to>
 		<stop_moving object="this.ship"/>
-		<resume label="better_piracy_skip"/>
 	</replace>
-	<!-- This selector matches lines 66 -->
-	<add sel="//attach_object_to_target" pos="before">
-		<label name="better_piracy_skip"/>
-	</add>
 </diff>

@@ -333,7 +333,7 @@
         <event_cue_signalled />
       </conditions>
       <actions>
-        <debug_text text="'Harass config - Changing ' + event.param.$id + ' from ' + Config.$Config.{event.param.$id} + ' to ' + event.param.$value"/>
+        <debug_to_file name="'BetterPiracy'" text="'%s --- Betterpiracy_config             --- Changing %s  from %s to %s.'.[player.age, event.param.$id, Config.$Config.{event.param.$id}, event.param.$value]" />        
         <set_value
           name="Config.$Config.{event.param.$id}"
           exact="event.param.$value"

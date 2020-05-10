@@ -24,7 +24,7 @@ That will start a quest, follow the steps and the prize will be yours.
 ### Create your own pirate gang.
 Subordinates of the ship you are piloting will smartly participate in the "Harass operation", helping you while avoiding killing the target.
 
-Tip: Use ships with a lot of shields and prefer high-shield/low-hull damage weapons for maximun efectiveness.
+Tip: Use ships with a lot of shields and prefer high-shield/low-hull damage weapons for maximum effectiveness.
 
 ### Removed "Ship type penalty" from the bailing calculation
 Before, you were heavily punished if you were flying a ship with a higher `maxHull` than the enemy you were harassing.

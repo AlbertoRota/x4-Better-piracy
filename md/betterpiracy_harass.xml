@@ -33,7 +33,7 @@
       <set_value name="$MissionCue"   exact="Harass_OperationCreated"/>
       <set_value name="$Target"       exact="event.param.$object"/>
       <set_value name="$Config"       exact="md.Betterpiracy_config.Config.$Config"/>
-      <set_value name="$CurrentPhase" exact="null"/>
+      <set_value name="$CurrentPhase" exact="'Harass_OperationCreated'"/>
       <set_value name="$Pressure"     exact="0"/>
       <set_value name="$BailAttepmps" exact="0"/>
 
@@ -143,35 +143,41 @@
           <event_cue_signalled/>
         </conditions>
         <actions>
-          <set_value name="$TargetPhase" exact="event.param"/>
-
-          <debug_to_file name="'BetterPiracy'" text="'%s --- Betterpiracy_harass            --- %s changing phase from `%s` to `%s`.'.[player.age, $MissionCue, $CurrentPhase, $TargetPhase]" />
           <do_if value="$CurrentPhase">
-            <cancel_cue cue="$CurrentPhase"/>
-            <set_value name="$CurrentPhase" exact="null"/>
-          </do_if>
+            <set_value name="$TargetPhase" exact="event.param"/>
 
-          <do_if value="$TargetPhase == 'createMission'">
-            <signal_cue cue="Harass_CreateMission"/>
+            <debug_to_file name="'BetterPiracy'" text="'%s --- Betterpiracy_harass            --- %s changing phase from `%s` to `%s`.'.[player.age, $MissionCue, $CurrentPhase, $TargetPhase]" />
+          
+            <do_if value="$CurrentPhase != 'Harass_OperationCreated'">
+              <cancel_cue cue="$CurrentPhase"/>
+            </do_if>
+            <set_value name="$CurrentPhase" exact="null"/>
+          
+            <do_if value="$TargetPhase == 'createMission'">
+              <signal_cue cue="Harass_CreateMission"/>
+            </do_if>
+            <do_elseif value="$TargetPhase == 'damageShields'">
+              <signal_cue cue="Harass_DamageShields"/>
+            </do_elseif>
+            <do_elseif value="$TargetPhase == 'damageHull'">
+              <signal_cue cue="Harass_DamageHull"/>
+            </do_elseif>
+            <do_elseif value="$TargetPhase == 'chaseTarget'">
+              <signal_cue cue="Harass_ChaseTarget"/>
+            </do_elseif>
+            <do_elseif value="$TargetPhase == 'waitSurrender'">
+              <signal_cue cue="Harass_WaitForSurrender"/>
+            </do_elseif>
+            <do_elseif value="$TargetPhase == 'claim'">
+              <signal_cue cue="Harass_Claim"/>
+            </do_elseif>
+            <do_elseif value="$TargetPhase == 'finish'">
+              <signal_cue cue="Harass_Finish"/>
+            </do_elseif>
           </do_if>
-          <do_elseif value="$TargetPhase == 'damageShields'">
-            <signal_cue cue="Harass_DamageShields"/>
-          </do_elseif>
-          <do_elseif value="$TargetPhase == 'damageHull'">
-            <signal_cue cue="Harass_DamageHull"/>
-          </do_elseif>
-          <do_elseif value="$TargetPhase == 'chaseTarget'">
-            <signal_cue cue="Harass_ChaseTarget"/>
-          </do_elseif>
-          <do_elseif value="$TargetPhase == 'waitSurrender'">
-            <signal_cue cue="Harass_WaitForSurrender"/>
-          </do_elseif>
-          <do_elseif value="$TargetPhase == 'claim'">
-            <signal_cue cue="Harass_Claim"/>
-          </do_elseif>
-          <do_elseif value="$TargetPhase == 'finish'">
-            <signal_cue cue="Harass_Finish"/>
-          </do_elseif>
+          <do_else>
+            <debug_to_file name="'BetterPiracy'" text="'%s --- Betterpiracy_harass            --- %s changing phase to `%s` skipped.'.[player.age, $MissionCue, $TargetPhase]" />
+          </do_else>
         </actions>
       </cue>
 

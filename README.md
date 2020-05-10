@@ -21,6 +21,11 @@ If you want to force some S/M ship to bail, or soften an L/XL ship before boardi
 
 That will start a quest, follow the steps and the prize will be yours.
 
+### Create your own pirate gang.
+Subordinates of the ship you are piloting will smartly participate in the "Harass operation", helping you while avoiding killing the target.
+
+Tip: Use ships with a lot of shields and prefer high-shield/low-hull damage weapons for maximum effectiveness.
+
 ### Removed "Ship type penalty" from the bailing calculation
 Before, you were heavily punished if you were flying a ship with a higher `maxHull` than the enemy you were harassing.
 
@@ -51,6 +56,8 @@ Added more than 20 configuration options to let you tune the mod to your likings
  - https://text2voice.org, https://twistedwave.com/online and https://voicechanger.io/ -> All of them used to create the custom dialog lines.
 
 ## Changelog
+### 0.10.0
+ - Subordinates of the player ship will smartly participate in the "Harass operation"
 ### 0.9.0
  - Improved logic to avoid having boarding pods orbiting ship when using marines to claim a ship
 ### 0.8.0

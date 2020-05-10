@@ -2,6 +2,9 @@
 <!-- Specific language file: applies to German only -->
 <language id="49">
   <page id="61537" title="Better piracy texts" descr="0" voice="no">
+    <!-- Harass order related texts -->
+    <t id="5050">Harass</t>
+    <t id="5051">Directly harass a target or support a harass operation.</t>
     <!-- Harass mission related texts -->
     <t id="5100">Schikanieren</t>
     <t id="5101">(Harass mission title)Gegnercrew schikanieren </t>
@@ -59,6 +62,7 @@
     <t id="5191">(Combat bailing pilots destroy components name)Kampf: Komponentenzerstörung durch Piloten</t>
     <t id="5192">(Combat bailing pilots destroy components mouseover)Wenn aktiviert, werden zum Ausstieg genötigte Piloten einige Schiffskomponenten zerstören.\n\nDie Anzahl der zerstörten Komponenten ist proportional zur Pilotenmoral des Zielschiffs.</t>
   </page>
+  <!-- Threatening lines -->
   <page id="61538" title="Better piracy voices" descr="0" voice="yes">
     <t id="4401">Der Kampf ist vorbei, verlassen Sie umgehend das Schiff!</t>
     <t id="4402">Wir sind an diesem Schiff interessiert. Machen Sie es uns nicht schwer und geben sofort auf!</t>

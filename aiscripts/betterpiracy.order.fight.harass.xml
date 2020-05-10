@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<aiscript name="betterpiracy.order.fight.harass" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://x4libonline.ddns.net/libraries/aiscripts.xsd">
+	<!-- To properly function, this order will need information available from the harass md script. order triggered via creation of a harass operation. -->
+	<order id="Harass" name="{61537, 5050}" description="{61537, 5051}" category="internal">
+		<params>
+			<param name="target" required="true" type="object" text="{1041, 10126}" comment="Target. The object to harass" />
+			<param name="harassoperation" default="null" type="internal" comment="Harass operation. Harass operation this ship is a part of" />
+		</params>
+		<requires>
+			<match shiptype="shiptype.lasertower" negate="true" />
+		</requires>
+		<location condition="$target.isoperational" object="$target" />
+	</order>
+	<interrupts>
+		<handler ref="SectorChangeHandler" />
+		<handler ref="TargetInvalidHandler" />
+		<handler ref="MissileLockHandler" />
+		<handler comment="Attack target event handler">
+			<conditions>
+				<check_all>
+					<event_object_signalled object="$target" param="$harassoperation" param2="'harass__attack'" />
+					<check_value value="$activebehavior != 'attack'"/>
+				</check_all>
+			</conditions>
+			<actions>
+				<debug_to_file name="'BetterPiracy'" text="'%s --- betterpiracy.order.fight.harass --- %s (%s) received an -Attack- signal from harass operation %s.'.[player.age, this.assignedcontrolled.knownname, this.assignedcontrolled.idcode, $harassoperation]" />
+				<abort_called_scripts resume="attack" />
+			</actions>
+		</handler>
+		<handler comment="Chase target event handler">
+			<conditions>
+				<check_all>
+					<event_object_signalled object="$target" param="$harassoperation" param2="'harass__chase'" />
+					<check_value value="$activebehavior != 'chase'"/>
+				</check_all>
+			</conditions>
+			<actions>
+				<debug_to_file name="'BetterPiracy'" text="'%s --- betterpiracy.order.fight.harass --- %s (%s) received a -Chase- signal from harass operation %s.'.[player.age, this.assignedcontrolled.knownname, this.assignedcontrolled.idcode, $harassoperation]" />
+				<abort_called_scripts resume="chase" />
+			</actions>
+		</handler>
+		<handler comment="End event handler">
+			<conditions>
+				<event_object_signalled object="$target" param="$harassoperation" param2="'harass__end'" />
+			</conditions>
+			<actions>
+				<debug_to_file name="'BetterPiracy'" text="'%s --- betterpiracy.order.fight.harass --- %s (%s) received an -End- signal from harass operation %s.'.[player.age, this.assignedcontrolled.knownname, this.assignedcontrolled.idcode, $harassoperation]" />
+				<abort_called_scripts resume="end" />
+			</actions>
+		</handler>
+	</interrupts>
+	<init>
+		<set_value name="$activebehavior" exact="'none'"/>
+		<debug_to_file name="'BetterPiracy'" text="'%s --- betterpiracy.order.fight.harass --- %s (%s) initializing harass operation %s against: %s (%s).'.[player.age, this.assignedcontrolled.knownname, this.assignedcontrolled.idcode, $harassoperation, $target.knownname, $target.idcode]" />
+	</init>
+	<attention min="unknown">
+		<actions>
+			<!-- Attack action: Attack the target -->
+			<label name="attack" />
+			<set_value name="$activebehavior" exact="'attack'"/>
+			<run_script name="'order.fight.attack.object'">
+				<param name="primarytarget" value="$target" />
+				<param name="allowothertargets" value="false" />
+			</run_script>
+			<resume label="attack" />
+
+			<!-- Chase action: Close-in but do NOT attack -->
+			<label name="chase" />
+			<set_value name="$activebehavior" exact="'chase'"/>
+			<cease_fire object="this.ship" />
+			<do_if value="this.ship.isclass.[class.ship_l, class.ship_xl] and this.ship.defencenpc.exists">
+				<signal_objects object="this.ship.defencenpc" param="'stop attack'"/>
+			</do_if>
+			<run_script name="'move.generic'">
+				<param name="destination" value="$target" />
+			</run_script>
+			<wait exact="2s" />
+			<resume label="chase" />
+
+			<!-- End action: CleanUp and finish -->
+			<label name="end"/>
+			<cease_fire object="this.ship" />
+			<do_if value="this.ship.isclass.[class.ship_l, class.ship_xl] and this.ship.defencenpc.exists">
+				<signal_objects object="this.ship.defencenpc" param="'stop attack'"/>
+			</do_if>
+			<debug_to_file name="'BetterPiracy'" text="'%s --- betterpiracy.order.fight.harass --- %s (%s) ending harass operation %s against: %s (%s).'.[player.age, this.assignedcontrolled.knownname, this.assignedcontrolled.idcode, $harassoperation, $target.knownname, $target.idcode]" />
+		</actions>
+	</attention>
+	<on_abort>
+		<cease_fire object="this.ship" />
+		<debug_to_file name="'BetterPiracy'" text="'%s --- betterpiracy.order.fight.harass --- %s (%s) aborting harass operation %s against: %s (%s).'.[player.age, this.assignedcontrolled.knownname, this.assignedcontrolled.idcode, $harassoperation, $target.knownname, $target.idcode]" />
+	</on_abort>
+</aiscript>

@@ -2,6 +2,9 @@
 <!-- General language file: applies to all which does not have their own language files -->
 <language>
   <page id="61537" title="Better piracy texts" descr="0" voice="no">
+    <!-- Harass order related texts -->
+    <t id="5050">Harass</t>
+    <t id="5051">Directly harass a target or support a harass operation.</t>
     <!-- Harass mission related texts -->
     <t id="5100">Harass</t>
     <t id="5101">(Harass mission title)Harass Operation </t>
@@ -59,6 +62,7 @@
     <t id="5191">(Combat bailing pilots destroy components name)Combat bailing pilots destroy components</t>
     <t id="5192">(Combat bailing pilots destroy components mouseover)When enabled, after after shooting a target until it bails the bailing pilot will destroy some of the ship componets.\n\nThe number of componets destroyed is proportional to the pilot morale.</t>
   </page>
+  <!-- Threatening lines -->
   <page id="61538" title="Better piracy voices" descr="0" voice="yes">
     <t id="4401">The battle is over, abandon your ship immediately!</t>
     <t id="4402">We are just interested in the ship. Make it easy and surrender now!</t>

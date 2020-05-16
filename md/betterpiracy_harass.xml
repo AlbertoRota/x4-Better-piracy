@@ -20,18 +20,33 @@
           $disabled_conditions = ['~show_PlayerInteractions', '~is_playerowned'],
           ]"
       />
-      <debug_to_file name="'BetterPiracy'" text="'%s --- Betterpiracy_harass            --- Registered custom `Harass` command as:  %s.'.[player.age, {61537, 5100}]" />
+      <debug_to_file name="'BetterPiracy'" text="'%s --- Betterpiracy_harass --- Registered custom `Harass` command as:  %s.'.[player.age, {61537, 5100}]" />
     </actions>
   </cue>
 
   <!-- Root cue where the state of the operation will be stored -->
   <cue name="Harass_OperationCreated" instantiate="true" namespace="this">
     <conditions>
-      <event_cue_signalled/>
+      <check_any>
+        <event_cue_signalled/>
+        <event_object_signalled object="player.entity" param="'corsair_init_harass'" />
+      </check_any>
     </conditions>
     <actions>
       <set_value name="$MissionCue"   exact="Harass_OperationCreated"/>
-      <set_value name="$Target"       exact="event.param.$object"/>
+
+      <do_if value="event.param == 'corsair_init_harass'">
+        <set_value name="$MainHarasser" exact="event.param2"/>
+        <set_value name="$Target"       exact="event.param3"/>
+        <set_value name="$HasMission"   exact="false"/>
+      </do_if>
+      <do_else>
+        <set_value name="$MainHarasser" exact="player.ship"/>
+        <set_value name="$Target"       exact="event.param.$object"/>
+        <set_value name="$HasMission"   exact="true"/>
+      </do_else>
+      
+      
       <set_value name="$Config"       exact="md.Betterpiracy_config.Config.$Config"/>
       <set_value name="$CurrentPhase" exact="'Harass_OperationCreated'"/>
       <set_value name="$Pressure"     exact="0"/>
@@ -50,13 +65,13 @@
       <set_value name="$MissionStep_WaitBailing"   exact="4"/>
       <set_value name="$MissionStep_ClaimShip"     exact="5"/>
 
-      <set_value name="$Harassers" exact="player.ship.subordinates" />
-      <debug_to_file name="'BetterPiracy'" text="'%s --- Betterpiracy_harass            --- Harass operation created: $MissionCue = %s, $Target = %s (%s), $MaxDistance = %s.'.[player.age, $MissionCue, $Target.knownname, $Target.idcode, $MaxDistance]" />
+      <set_value name="$Harassers" exact="$MainHarasser.subordinates" />
+      <debug_to_file name="'BetterPiracy'" text="'%s --- Betterpiracy_harass --- Harass operation created: $MissionCue = %s, $MainHarasser = %s (%s), $Target = %s (%s), $MaxDistance = %s.'.[player.age, $MissionCue, $MainHarasser.knownname, $MainHarasser.idcode, $Target.knownname, $Target.idcode, $MaxDistance]" />
     </actions>
     <cues>
       <cue name="Harass_Init">
         <actions>
-          <debug_to_file name="'BetterPiracy'" text="'%s --- Betterpiracy_harass            --- %s calling `Harass_Init` cue.'.[player.age, $MissionCue]" />
+          <debug_to_file name="'BetterPiracy'" text="'%s --- Betterpiracy_harass --- %s calling `Harass_Init` cue.'.[player.age, $MissionCue]" />
           <signal_cue_instantly cue="Harass_ChangePhase" param="'createMission'"/>
         </actions>
       </cue>
@@ -65,7 +80,7 @@
           <event_mission_aborted cue="$MissionCue"/>
         </conditions>
         <actions>
-          <debug_to_file name="'BetterPiracy'" text="'%s --- Betterpiracy_harass            --- %s calling `Harass_Aborted` cue.'.[player.age, $MissionCue]" />
+          <debug_to_file name="'BetterPiracy'" text="'%s --- Betterpiracy_harass --- %s calling `Harass_Aborted` cue.'.[player.age, $MissionCue]" />
           <signal_cue_instantly cue="Harass_ChangePhase" param="'finish'"/>
         </actions>
       </cue>
@@ -73,36 +88,40 @@
       <!-- Library - INIT -->
       <library name="Harass_CheckTarget">
         <actions>
-          <debug_to_file name="'BetterPiracy'" text="'%s --- Betterpiracy_harass            --- %s calling `Harass_CheckTarget` library: $Target.isoperational = %s, $Target.owner = %s'.[player.age, $MissionCue, $Target.isoperational, $Target.owner]" />
-          <do_if value="not $Target.isoperational">
+          <do_if value="not $Target.isoperational or $Target.dock or not $MainHarasser.isoperational or $MainHarasser.sector != $Target.sector">
+            <debug_to_file name="'BetterPiracy'" text="'%s --- Betterpiracy_harass --- %s `Harass_CheckTarget` library check failed, operation can not continue: $Target.isoperational = %s, $Target.dock = %s, $MainHarasser.isoperational = %s, $MainHarasser.sector = %s, $Target.sector = %s'.[player.age, $MissionCue, $Target.isoperational, $Target.dock, $MainHarasser.isoperational, $MainHarasser.sector, $Target.sector]" />
             <signal_cue_instantly cue="Harass_ChangePhase" param="'finish'"/>
           </do_if>
           <do_if value="$Target.owner == faction.ownerless">
+            <debug_to_file name="'BetterPiracy'" text="'%s --- Betterpiracy_harass --- %s `Harass_CheckTarget` library check passed, moving to claim phase: $Target.owner = %s'.[player.age, $MissionCue, $Target.owner]" />
             <signal_cue_instantly cue="Harass_ChangePhase" param="'claim'"/>
           </do_if>
           <do_if value="$Target.owner == faction.player">
+            <debug_to_file name="'BetterPiracy'" text="'%s --- Betterpiracy_harass --- %s `Harass_CheckTarget` library check passed, moving to finish phase: $Target.owner = %s'.[player.age, $MissionCue, $Target.owner]" />
             <signal_cue_instantly cue="Harass_ChangePhase" param="'finish'"/>
           </do_if>
         </actions>
       </library>
       <library name="Harass_CheckShields">
         <actions>
-          <debug_to_file name="'BetterPiracy'" text="'%s --- Betterpiracy_harass            --- %s calling `Harass_CheckShields` library: $Target.shieldpercentage = %s, $Config.{`$harass_shield_threshold`} = %s'.[player.age, $MissionCue, $Target.shieldpercentage, $Config.{'$harass_shield_threshold'}]" />
           <do_if value="$Target.shieldpercentage ge $Config.{'$harass_shield_threshold'}">
+            <debug_to_file name="'BetterPiracy'" text="'%s --- Betterpiracy_harass --- %s `Harass_CheckShields` library check failed, rolling back to damageShields phase: $Target.shieldpercentage = %s, $Config.{`$harass_shield_threshold`} = %s'.[player.age, $MissionCue, $Target.shieldpercentage, $Config.{'$harass_shield_threshold'}]" />
             <signal_cue_instantly cue="Harass_ChangePhase" param="'damageShields'"/>
           </do_if>
         </actions>
       </library>
       <library name="Harass_CheckHull">
         <actions>
-          <debug_to_file name="'BetterPiracy'" text="'%s --- Betterpiracy_harass            --- %s calling `Harass_CheckHull` library: $Target.hullpercentage = %s, $BailAttepmps = %s, $Config.{`$harass_bail_attepmps_before_mid`} = %s, $Config.{`$harass_bail_attepmps_before_late`} = %s, $Config.{`$early_harass_hull_threshold`} = %s, $Config.{`$mid_harass_hull_threshold`} = %s, $Config.{`$late_harass_hull_threshold`} = %s'.[player.age, $MissionCue, $Target.hullpercentage, $BailAttepmps, $Config.{'$harass_bail_attepmps_before_mid'}, $Config.{'$harass_bail_attepmps_before_late'}, $Config.{'$early_harass_hull_threshold'}, $Config.{'$mid_harass_hull_threshold'}, $Config.{'$late_harass_hull_threshold'}]" />
           <do_if value="$BailAttepmps ge $Config.{'$harass_bail_attepmps_before_late'} and $Target.hullpercentage ge $Config.{'$late_harass_hull_threshold'}">
+            <debug_to_file name="'BetterPiracy'" text="'%s --- Betterpiracy_harass --- %s `Harass_CheckHull` library check failed, rolling back to damageHull phase: $Target.hullpercentage = %s, $BailAttepmps = %s, $Config.{`$harass_bail_attepmps_before_mid`} = %s, $Config.{`$harass_bail_attepmps_before_late`} = %s, $Config.{`$early_harass_hull_threshold`} = %s, $Config.{`$mid_harass_hull_threshold`} = %s, $Config.{`$late_harass_hull_threshold`} = %s'.[player.age, $MissionCue, $Target.hullpercentage, $BailAttepmps, $Config.{'$harass_bail_attepmps_before_mid'}, $Config.{'$harass_bail_attepmps_before_late'}, $Config.{'$early_harass_hull_threshold'}, $Config.{'$mid_harass_hull_threshold'}, $Config.{'$late_harass_hull_threshold'}]" />
             <signal_cue_instantly cue="Harass_ChangePhase" param="'damageHull'"/>
           </do_if>
           <do_elseif value="$BailAttepmps ge $Config.{'$harass_bail_attepmps_before_mid'} and $Target.hullpercentage ge $Config.{'$mid_harass_hull_threshold'}">
+            <debug_to_file name="'BetterPiracy'" text="'%s --- Betterpiracy_harass --- %s `Harass_CheckHull` library check failed, rolling back to damageHull phase: $Target.hullpercentage = %s, $BailAttepmps = %s, $Config.{`$harass_bail_attepmps_before_mid`} = %s, $Config.{`$harass_bail_attepmps_before_late`} = %s, $Config.{`$early_harass_hull_threshold`} = %s, $Config.{`$mid_harass_hull_threshold`} = %s, $Config.{`$late_harass_hull_threshold`} = %s'.[player.age, $MissionCue, $Target.hullpercentage, $BailAttepmps, $Config.{'$harass_bail_attepmps_before_mid'}, $Config.{'$harass_bail_attepmps_before_late'}, $Config.{'$early_harass_hull_threshold'}, $Config.{'$mid_harass_hull_threshold'}, $Config.{'$late_harass_hull_threshold'}]" />
             <signal_cue_instantly cue="Harass_ChangePhase" param="'damageHull'"/>
           </do_elseif>
           <do_elseif value="$Target.hullpercentage ge $Config.{'$early_harass_hull_threshold'}">
+            <debug_to_file name="'BetterPiracy'" text="'%s --- Betterpiracy_harass --- %s `Harass_CheckHull` library check failed, rolling back to damageHull phase: $Target.hullpercentage = %s, $BailAttepmps = %s, $Config.{`$harass_bail_attepmps_before_mid`} = %s, $Config.{`$harass_bail_attepmps_before_late`} = %s, $Config.{`$early_harass_hull_threshold`} = %s, $Config.{`$mid_harass_hull_threshold`} = %s, $Config.{`$late_harass_hull_threshold`} = %s'.[player.age, $MissionCue, $Target.hullpercentage, $BailAttepmps, $Config.{'$harass_bail_attepmps_before_mid'}, $Config.{'$harass_bail_attepmps_before_late'}, $Config.{'$early_harass_hull_threshold'}, $Config.{'$mid_harass_hull_threshold'}, $Config.{'$late_harass_hull_threshold'}]" />
             <signal_cue_instantly cue="Harass_ChangePhase" param="'damageHull'"/>
           </do_elseif>
         </actions>
@@ -121,16 +140,16 @@
             </do_if>
           </do_all>
 
-          <debug_to_file name="'BetterPiracy'" text="'%s --- Betterpiracy_harass            --- %s calling `Harass_CheckDistance` library: $HarassersInRange = %s'.[player.age, $MissionCue, $HarassersInRange]" />
           <do_if value="$HarassersInRange == 0">
+            <debug_to_file name="'BetterPiracy'" text="'%s --- Betterpiracy_harass --- %s calling `Harass_CheckDistance` library check failed, rolling back to chaseTarget phase: $HarassersInRange = %s'.[player.age, $MissionCue, $HarassersInRange]" />
             <signal_cue_instantly cue="Harass_ChangePhase" param="'chaseTarget'"/>
           </do_if>
         </actions>
       </library>
       <library name="Harass_CheckCrew">
         <actions>
-          <debug_to_file name="'BetterPiracy'" text="'%s --- Betterpiracy_harass            --- %s calling `Harass_CheckCrew` library: $Target.iscapitalship = %s'.[player.age, $MissionCue, $Target.iscapitalship]" />
           <do_if value="$Target.iscapitalship and $Target.people.count le ($Target.people.capacity * ($Config.{'$harass_lxl_min_crew_left_base'} + ($Config.{'$harass_lxl_min_crew_left_pilot'} * ((15 - $Target.pilot.skill.morale)f / 15.0))) / 100)i">
+            <debug_to_file name="'BetterPiracy'" text="'%s --- Betterpiracy_harass --- %s calling `Harass_CheckCrew` library check passed, moving to claim phase: $Target.iscapitalship = %s'.[player.age, $MissionCue, $Target.iscapitalship]" />
             <signal_cue_instantly cue="Harass_ChangePhase" param="'claim'"/>
           </do_if>
         </actions>
@@ -146,7 +165,7 @@
           <do_if value="$CurrentPhase">
             <set_value name="$TargetPhase" exact="event.param"/>
 
-            <debug_to_file name="'BetterPiracy'" text="'%s --- Betterpiracy_harass            --- %s changing phase from `%s` to `%s`.'.[player.age, $MissionCue, $CurrentPhase, $TargetPhase]" />
+            <debug_to_file name="'BetterPiracy'" text="'%s --- Betterpiracy_harass --- %s changing phase from `%s` to `%s`.'.[player.age, $MissionCue, $CurrentPhase, $TargetPhase]" />
           
             <do_if value="$CurrentPhase != 'Harass_OperationCreated'">
               <cancel_cue cue="$CurrentPhase"/>
@@ -176,7 +195,7 @@
             </do_elseif>
           </do_if>
           <do_else>
-            <debug_to_file name="'BetterPiracy'" text="'%s --- Betterpiracy_harass            --- %s changing phase to `%s` skipped.'.[player.age, $MissionCue, $TargetPhase]" />
+            <debug_to_file name="'BetterPiracy'" text="'%s --- Betterpiracy_harass --- %s changing phase to `%s` skipped.'.[player.age, $MissionCue, $TargetPhase]" />
           </do_else>
         </actions>
       </cue>
@@ -188,16 +207,24 @@
         <actions>
           <set_value name="$CurrentPhase" exact="this"/>
 
-          <debug_to_file name="'BetterPiracy'" text="'%s --- Betterpiracy_harass            --- %s calling `Harass_CreateMission` cue.'.[player.age, $MissionCue]" />
-          <create_mission cue="$MissionCue" name="{61537, 5101}" description="{61537, 5102}" faction="faction.player" type="missiontype.fight">
-            <briefing>
-              <objective step="$MissionStep_DamageShields"  action="objective.custom"   customaction="{61537, 5103}"  text="{61537, 5105}" comment="'Increase pressure: Destroy their shields'"/>
-              <objective step="$MissionStep_DamageHull"     action="objective.custom"   customaction="{61537, 5103}"  text="{61537, 5106}" comment="'Increase pressure: Damage their hull'"/>
-              <objective step="$MissionStep_ChaseTarget"    action="objective.approach"                               text="{61537, 5107}" comment="'Approach: Get closer to your target'"/>
-              <objective step="$MissionStep_WaitBailing"    action="objective.custom"   customaction="{61537, 5104}"  text="{61537, 5108}" comment="'Maintain pressure: Do not kill the target!'"/>
-              <objective step="$MissionStep_ClaimShip"      action="objective.claim"                                  text="{61537, 5109}" comment="'Claim: The ship is empty'"/>
-            </briefing>
-          </create_mission>
+          <debug_to_file name="'BetterPiracy'" text="'%s --- Betterpiracy_harass --- %s calling `Harass_CreateMission` cue.'.[player.age, $MissionCue]" />
+          <do_if value="$HasMission">
+            <create_mission cue="$MissionCue" name="{61537, 5101}" description="{61537, 5102}" faction="faction.player" type="missiontype.fight">
+              <briefing>
+                <objective step="$MissionStep_DamageShields"  action="objective.custom"   customaction="{61537, 5103}"  text="{61537, 5105}" comment="'Increase pressure: Destroy their shields'"/>
+                <objective step="$MissionStep_DamageHull"     action="objective.custom"   customaction="{61537, 5103}"  text="{61537, 5106}" comment="'Increase pressure: Damage their hull'"/>
+                <objective step="$MissionStep_ChaseTarget"    action="objective.approach"                               text="{61537, 5107}" comment="'Approach: Get closer to your target'"/>
+                <objective step="$MissionStep_WaitBailing"    action="objective.custom"   customaction="{61537, 5104}"  text="{61537, 5108}" comment="'Maintain pressure: Do not kill the target!'"/>
+                <objective step="$MissionStep_ClaimShip"      action="objective.claim"                                  text="{61537, 5109}" comment="'Claim: The ship is empty'"/>
+              </briefing>
+            </create_mission>
+          </do_if>
+          <do_else>
+            <create_order id="'Harass'" object="$MainHarasser">
+              <param name="target" value="$Target"/>
+              <param name="harassoperation" value="$MissionCue"/>
+            </create_order>
+          </do_else>
 
           <do_all exact="$Harassers.count" counter="$i">
             <create_order id="'Harass'" object="$Harassers.{$i}">
@@ -216,24 +243,24 @@
         </conditions>
         <actions>
           <set_value name="$CurrentPhase" exact="this"/>
-          <debug_to_file name="'BetterPiracy'" text="'%s --- Betterpiracy_harass            --- %s calling `Harass_DamageShields` cue.'.[player.age, $MissionCue]" />
+          <debug_to_file name="'BetterPiracy'" text="'%s --- Betterpiracy_harass --- %s calling `Harass_DamageShields` cue.'.[player.age, $MissionCue]" />
+          <signal_objects object="$Target" param="$MissionCue" param2="'harass__attack'"/>
         </actions>
         <cues>
           <cue name="Harass_DamageShields_Check" instantiate="true" checkinterval="1s">
             <actions>
               <include_actions ref="Harass_CheckTarget"/>
 
-              <signal_objects object="$Target" param="$MissionCue" param2="'harass__attack'"/>
-
               <do_if value="$Target.shieldpercentage le ($Config.{'$harass_shield_threshold'} - 10)">
-                <debug_to_file name="'BetterPiracy'" text="'%s --- Betterpiracy_harass            --- %s --- `Harass_DamageShields_Check` passed: $Target.shieldpercentage = %s, $Config.{`$harass_shield_threshold`} = %s.'.[player.age, $MissionCue, $Target.shieldpercentage, $Config.{'$harass_shield_threshold'}]" />
+                <debug_to_file name="'BetterPiracy'" text="'%s --- Betterpiracy_harass --- %s --- `Harass_DamageShields_Check` passed, moving to damageHull phase: $Target.shieldpercentage = %s, $Config.{`$harass_shield_threshold`} = %s.'.[player.age, $MissionCue, $Target.shieldpercentage, $Config.{'$harass_shield_threshold'}]" />
                 <signal_cue_instantly cue="Harass_ChangePhase" param="'damageHull'"/>
               </do_if>
               <do_else>
-                <debug_to_file name="'BetterPiracy'" text="'%s --- Betterpiracy_harass            --- %s --- `Harass_DamageShields_Check` updated: $Target.shieldpercentage = %s, $Config.{`$harass_shield_threshold`} = %s.'.[player.age, $MissionCue, $Target.shieldpercentage, $Config.{'$harass_shield_threshold'}]" />
-                <set_objective cue="$MissionCue" step="$MissionStep_DamageShields" action="objective.custom" customaction="{61537, 5103}" text="{61537, 5105}" object="$Target" silent="true">
-                  <progress progress="100 - $Target.shieldpercentage" max="100 - ($Config.{'$harass_shield_threshold'} - 10)"/>
-                </set_objective>
+                <do_if value="$HasMission">
+                  <set_objective cue="$MissionCue" step="$MissionStep_DamageShields" action="objective.custom" customaction="{61537, 5103}" text="{61537, 5105}" object="$Target" silent="true">
+                    <progress progress="100 - $Target.shieldpercentage" max="100 - ($Config.{'$harass_shield_threshold'} - 10)"/>
+                  </set_objective>
+                </do_if>
               </do_else>
             </actions>
           </cue>
@@ -246,15 +273,14 @@
         </conditions>
         <actions>
           <set_value name="$CurrentPhase" exact="this"/>
-          <debug_to_file name="'BetterPiracy'" text="'%s --- Betterpiracy_harass            --- %s calling `Harass_DamageHull` cue.'.[player.age, $MissionCue]" />
+          <debug_to_file name="'BetterPiracy'" text="'%s --- Betterpiracy_harass --- %s calling `Harass_DamageHull` cue.'.[player.age, $MissionCue]" />
+          <signal_objects object="$Target" param="$MissionCue" param2="'harass__attack'"/>
         </actions>
         <cues>
           <cue name="Harass_DamageHull_Check" instantiate="true" checkinterval="1s">
             <actions>
               <include_actions ref="Harass_CheckTarget"/>
               <include_actions ref="Harass_CheckShields"/>
-
-              <signal_objects object="$Target" param="$MissionCue" param2="'harass__attack'"/>
     
               <do_if value="$BailAttepmps ge $Config.{'$harass_bail_attepmps_before_late'}">
                 <set_value name="$MissedHullThreshold" exact="100 - $Config.{'$late_harass_hull_threshold'}"/>
@@ -268,14 +294,15 @@
 
               <set_value name="$TargetHullMissed" exact="100 - $Target.hullpercentage"/>
               <do_if value="$TargetHullMissed ge $MissedHullThreshold">
-                <debug_to_file name="'BetterPiracy'" text="'%s --- Betterpiracy_harass            --- %s --- `Harass_DamageHull_Check` passed: $Target.hullpercentage = %s, $TargetHullMissed = %s.'.[player.age, $MissionCue, $Target.hullpercentage, $TargetHullMissed]" />
+                <debug_to_file name="'BetterPiracy'" text="'%s --- Betterpiracy_harass --- %s --- `Harass_DamageHull_Check` passed, moving to chaseTarget phase: $Target.hullpercentage = %s, $TargetHullMissed = %s.'.[player.age, $MissionCue, $Target.hullpercentage, $TargetHullMissed]" />
                 <signal_cue_instantly cue="Harass_ChangePhase" param="'chaseTarget'"/>
               </do_if>
               <do_else>
-                <debug_to_file name="'BetterPiracy'" text="'%s --- Betterpiracy_harass            --- %s --- `Harass_DamageHull_Check` updated: $Target.hullpercentage = %s, $TargetHullMissed = %s.'.[player.age, $MissionCue, $Target.hullpercentage, $TargetHullMissed]" />
-                <set_objective cue="$MissionCue" step="$MissionStep_DamageHull" action="objective.custom" customaction="{61537, 5103}" text="{61537, 5106}" object="$Target" silent="true">
-                  <progress progress="$TargetHullMissed" max="$MissedHullThreshold"/>
-                </set_objective>
+                <do_if value="$HasMission">
+                  <set_objective cue="$MissionCue" step="$MissionStep_DamageHull" action="objective.custom" customaction="{61537, 5103}" text="{61537, 5106}" object="$Target" silent="true">
+                    <progress progress="$TargetHullMissed" max="$MissedHullThreshold"/>
+                  </set_objective>
+                </do_if>
               </do_else>
             </actions>
           </cue>
@@ -288,8 +315,11 @@
         </conditions>
         <actions>
           <set_value name="$CurrentPhase" exact="this"/>
-          <debug_to_file name="'BetterPiracy'" text="'%s --- Betterpiracy_harass            --- %s calling `Harass_ChaseTarget` cue.'.[player.age, $MissionCue]" />
-          <set_objective cue="$MissionCue" step="$MissionStep_ChaseTarget" action="objective.approach" text="{61537, 5107}" object="$Target" silent="true"/>
+          <debug_to_file name="'BetterPiracy'" text="'%s --- Betterpiracy_harass --- %s calling `Harass_ChaseTarget` cue.'.[player.age, $MissionCue]" />
+          <signal_objects object="$Target" param="$MissionCue" param2="'harass__chase'"/>
+          <do_if value="$HasMission">
+            <set_objective cue="$MissionCue" step="$MissionStep_ChaseTarget" action="objective.approach" text="{61537, 5107}" object="$Target" silent="true"/>
+          </do_if>
         </actions>
         <cues>
           <cue name="Harass_ChaseTarget_Check" instantiate="true" checkinterval="1s">
@@ -298,7 +328,6 @@
               <include_actions ref="Harass_CheckShields"/>
               <include_actions ref="Harass_CheckHull"/>
 
-              <signal_objects object="$Target" param="$MissionCue" param2="'harass__chase'"/>
               <set_value name="$HarassersInRange" exact="0"/>
               <!-- Check if player is close to target -->
               <do_if value="player.entity.distanceto.{$Target} le $MaxDistance">
@@ -311,7 +340,7 @@
                 </do_if>
               </do_all>
               <do_if value="$HarassersInRange gt 0">
-                <debug_to_file name="'BetterPiracy'" text="'%s --- Betterpiracy_harass            --- %s --- `Harass_ChaseTarget_Check` passed: $HarassersInRange = %s.'.[player.age, $MissionCue, $HarassersInRange]" />
+                <debug_to_file name="'BetterPiracy'" text="'%s --- Betterpiracy_harass --- %s --- `Harass_ChaseTarget_Check` passed, moving to waitSurrender phase: $HarassersInRange = %s.'.[player.age, $MissionCue, $HarassersInRange]" />
                 <signal_cue_instantly cue="Harass_ChangePhase" param="'waitSurrender'"/>
               </do_if>
             </actions>
@@ -325,8 +354,8 @@
         </conditions>
         <actions>
           <set_value name="$CurrentPhase" exact="this"/>
-          <debug_to_file name="'BetterPiracy'" text="'%s --- Betterpiracy_harass            --- %s calling `Harass_WaitForSurrender` cue.'.[player.age, $MissionCue]" />
-          
+          <debug_to_file name="'BetterPiracy'" text="'%s --- Betterpiracy_harass --- %s calling `Harass_WaitForSurrender` cue.'.[player.age, $MissionCue]" />
+          <signal_objects object="$Target" param="$MissionCue" param2="'harass__chase'"/>
           <set_value name="$NextBailCheck" exact="player.age + ($Config.{'$keep_pressure_timer'})s"/>
           <set_value name="$InitialTimeLeft" exact="$NextBailCheck - player.age"/>
         </actions>
@@ -338,21 +367,22 @@
               <include_actions ref="Harass_CheckShields"/>
               <include_actions ref="Harass_CheckHull"/>
               <include_actions ref="Harass_CheckDistance"/>
-    
-              <signal_objects object="$Target" param="$MissionCue" param2="'harass__chase'"/>
 
               <set_value name="$CurrentTimeLeft" exact="$NextBailCheck - player.age"/>
-              <set_objective cue="$MissionCue" step="$MissionStep_WaitBailing" action="objective.custom" customaction="{61537, 5104}" text="{61537, 5108}" object="$Target" silent="true">
-                <progress progress="$InitialTimeLeft - $CurrentTimeLeft" max="$InitialTimeLeft"/>
-              </set_objective>
+              <do_if value="$HasMission">
+                <set_objective cue="$MissionCue" step="$MissionStep_WaitBailing" action="objective.custom" customaction="{61537, 5104}" text="{61537, 5108}" object="$Target" silent="true">
+                  <progress progress="$InitialTimeLeft - $CurrentTimeLeft" max="$InitialTimeLeft"/>
+                </set_objective>
+              </do_if>
               
               <do_if value="$CurrentTimeLeft le 0">
                 <set_value name="$NextBailCheck" exact="player.age + ($Config.{'$keep_pressure_timer'})s"/>
                 <set_value name="$Pressure" operation="add"/>
                 <set_value name="$BailAttepmps" operation="add"/>
-                <speak actor="player.computer" page="61538" line="[4401, 4402, 4403, 4404, 4405, 4406, 4407, 4408, 4409].random" priority="90"/>
-                
-                <debug_to_file name="'BetterPiracy'" text="'%s --- Betterpiracy_harass            --- %s --- `Harass_WaitForSurrender_Check` passed: $NextBailCheck = %s, $Pressure = %s, $BailAttepmps = %s.'.[player.age, $MissionCue, $NextBailCheck, $Pressure, $BailAttepmps]" />
+                <do_if value="$HasMission">
+                  <speak actor="player.computer" page="61538" line="[4401, 4402, 4403, 4404, 4405, 4406, 4407, 4408, 4409].random" priority="90"/>
+                </do_if>
+                <debug_to_file name="'BetterPiracy'" text="'%s --- Betterpiracy_harass --- %s --- `Harass_WaitForSurrender_Check` passed, triggering bail attemp: $NextBailCheck = %s, $Pressure = %s, $BailAttepmps = %s.'.[player.age, $MissionCue, $NextBailCheck, $Pressure, $BailAttepmps]" />
                 <signal_cue_instantly cue="md.Betterpiracy_custom_bail_logic.PlayerOwnedShipHarass" param="$MissionCue"/>
               </do_if>
             </actions>
@@ -366,15 +396,18 @@
         </conditions>
         <actions>
           <set_value name="$CurrentPhase" exact="this"/>
-          <debug_to_file name="'BetterPiracy'" text="'%s --- Betterpiracy_harass            --- %s calling `Harass_Claim` cue.'.[player.age, $MissionCue]" />
-
+          <debug_to_file name="'BetterPiracy'" text="'%s --- Betterpiracy_harass --- %s calling `Harass_Claim` cue.'.[player.age, $MissionCue]" />
           <signal_objects object="$Target" param="$MissionCue" param2="'harass__end'"/>
-
-          <do_if value="$Target.iscapitalship">
-            <set_objective cue="$MissionCue" step="$MissionStep_ClaimShip" action="objective.board" text="{61537, 5110}" object="$Target" silent="true"/>
+          <do_if value="$HasMission">
+            <do_if value="$Target.iscapitalship">
+              <set_objective cue="$MissionCue" step="$MissionStep_ClaimShip" action="objective.board" text="{61537, 5110}" object="$Target" silent="true"/>
+            </do_if>
+            <do_else>
+              <set_objective cue="$MissionCue" step="$MissionStep_ClaimShip" action="objective.claim" text="{61537, 5109}" object="$Target" silent="true"/>
+            </do_else>
           </do_if>
           <do_else>
-            <set_objective cue="$MissionCue" step="$MissionStep_ClaimShip" action="objective.claim" text="{61537, 5109}" object="$Target" silent="true"/>
+            <signal_cue_instantly cue="Harass_ChangePhase" param="'finish'"/>
           </do_else>
         </actions>
         <cues>
@@ -393,10 +426,12 @@
           <event_cue_signalled/>
         </conditions>
         <actions>
-          <debug_to_file name="'BetterPiracy'" text="'%s --- Betterpiracy_harass            --- %s calling `Harass_Finish` cue.'.[player.age, $MissionCue]" />
+          <debug_to_file name="'BetterPiracy'" text="'%s --- Betterpiracy_harass --- %s calling `Harass_Finish` cue.'.[player.age, $MissionCue]" />
 
           <signal_objects object="$Target" param="$MissionCue" param2="'harass__end'"/>
-          <remove_mission cue="$MissionCue" type="completed"/>
+          <do_if value="$HasMission">
+            <remove_mission cue="$MissionCue" type="completed"/>
+          </do_if>
           <cancel_cue cue="$MissionCue"/>
         </actions>
       </cue>

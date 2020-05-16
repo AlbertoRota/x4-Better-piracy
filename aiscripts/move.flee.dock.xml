@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<diff>
+	<!-- Only allied station will be selected -->
+	<!-- This selector matches lines 31 -->
+	<replace sel="//find_station">
+		<find_station name="$stations" functional="true" space="this.zone" multiple="true" >
+			<match_relation_to object="this" relation="neutral" comparison="ge" />
+			<match_relation_to object="$attacker" relation="neutral" comparison="le" />
+		</find_station>
+	</replace>
+</diff>

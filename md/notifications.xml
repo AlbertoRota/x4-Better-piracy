@@ -25,8 +25,9 @@
 	<!-- This selector matches line 1012 -->
 	<add sel="//eject_npcs" pos="before">
 		<!-- Reputation hit for doing piracy -->
-		<do_if value="md.Betterpiracy_config.Config.$Config.{'$harass_reputation_hit'} == 1">
-			<signal_cue_instantly cue="PlayerBoarding" param="[$target, 'boarding started']" />
+		<do_if value="md.Betterpiracy_config.Config.$Config.{'$combat_reputation_hit'} == 1">
+			<!-- Reputation hit disabled until I find a proper way of handling it. -->
+			<!-- <signal_cue_instantly cue="PlayerBoarding" param="[$target, 'boarding started']" /> -->
 		</do_if>
 
 		<!-- Remove extra damage to hull -->

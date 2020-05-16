@@ -22,8 +22,8 @@
       <set_value name="$Config"                 exact="md.Betterpiracy_config.Config.$Config"/>
 
       <set_value name="$targetEffectiveMorale"  exact="[$target.pilot.skill.morale - ($MissionCue.$Pressure * $Config.{'$pressure_buildup_rate'})i, 0].max"/>
-      <set_value name="$attacker"               exact="player.occupiedship"/>
-      <set_value name="$isPlayerInvolved"       exact="player.sector.knownname == $target.sector.knownname"/>
+      <set_value name="$attacker"               exact="$MissionCue.$MainHarasser"/>
+      <set_value name="$isPlayerInvolved"       exact="$MissionCue.$MainHarasser == player.ship"/>
       
       <debug_to_file name="'BetterPiracy'" text="'%s --- Betterpiracy_custom_bail_logic  --- %s (%s) triggered bail check on %s (%s).'.[player.age, $attacker.knownname, $attacker.idcode, $target.knownname, $target.idcode]" />
 
@@ -114,7 +114,8 @@
 
             <!-- Reputation hit for doing piracy -->
             <do_if value="$Config.{'$harass_reputation_hit'} == 1">
-              <signal_cue_instantly cue="PlayerBoarding" param="[$target, 'boarding started']" />
+              <!-- Reputation hit disabled until I find a proper way of handling it. -->
+              <!-- <signal_cue_instantly cue="PlayerBoarding" param="[$target, 'boarding started']" /> -->
             </do_if>
             
             <!-- Clear all target orders and empty it -->
@@ -145,7 +146,7 @@
             </do_if>
 
             <!-- If the ship is still alive, destroy some of their componets (Shields excluded to keep compatibility with VRO)-->
-            <do_if value="$Config.{'$harass_bailing_pilots_damage_components'} == 1">
+            <do_if value="$Config.{'$harass_bailing_pilots_destroy_components'} == 1">
               <do_if value="$target.exists">
                 <add_effect object="$target" effect="$target.scuttleeffect"/>
                 <find_object_component name="$subcomponents" object="$target" class="[class.weapon, class.turret]" multiple="true"/>

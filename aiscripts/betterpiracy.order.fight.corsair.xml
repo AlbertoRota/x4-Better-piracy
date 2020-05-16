@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<aiscript name="betterpiracy.order.fight.corsair" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://x4libonline.ddns.net/libraries/aiscripts.xsd">
+	<order id="Corsair" name="{61537, 5052}" description="{61537, 5053}" category="combat" infinite="true">
+		<params>
+			<param name="destination" type="position" text="{1041, 10007}" comment="Area to patrol">
+				<input_param name="class" value="class.sector" />
+			</param>
+			<param name="radius" type="length" default="this.ship.maxradarrange" text="{1041, 10093}" comment="Radius">
+				<input_param name="min" value="1km" />
+				<input_param name="max" value="[this.ship.maxradarrange, 1km].max" />
+				<input_param name="step" value="1km" />
+			</param>
+
+			<param name="harass_s_ships" default="false" type="bool" text="{61537, 5054}" /> <!-- class.ship_s -->
+			<param name="harass_m_ships" default="true" type="bool" text="{61537, 5055}" /> <!-- class.ship_m -->
+
+			<param name="harass_combat_ships" default="false" type="bool" text="{61537, 5056}" /> <!-- purpose.fight -->
+			<param name="harass_trader_ships" default="true" type="bool" text="{61537, 5057}" /> <!-- purpose.trade -->
+			<param name="harass_miner_ships" default="true" type="bool" text="{61537, 5058}" /> <!-- purpose.mine -->
+		</params>
+		<skill min="60"/>
+		<requires>
+			<match shiptype="shiptype.lasertower" negate="true" />
+		</requires>
+		<location object="$destination.{1}" position="$destination.{2}" radius="$radius" />
+	</order>
+	<interrupts>
+		<handler ref="SectorChangeHandler" />
+		<handler ref="ScannedHandler" />
+		<handler ref="InspectedHandler" />
+		<handler ref="FoundAbandonedHandler" />
+		<handler ref="FoundLockboxHandler" />
+		<handler ref="TargetInvalidHandler" />
+		<handler ref="ResupplyHandler" />
+	</interrupts>
+	<init>
+		<set_command command="command.patrol" />
+		<do_if value="$destination.{1}.isclass.sector">
+			<set_value name="$targetsector" exact="$destination.{1}" />
+		</do_if>
+		<do_elseif value="$destination.{1}.isclass.zone">
+			<do_if value="$destination.{1}.isclass.highway">
+				<debug_to_file name="'BetterPiracy'" text="'%1 (%2) was sent to harass an area inside a highway. This is not supported.  Destination Space: %3 (%4), Position: %5'.[this.ship.knownname, this.ship, $destination.{1}.knownname, $destination.{1}, $destination.{2}]" />
+				<return />
+			</do_if>
+			<do_elseif value="$destination.{1}.sector">
+				<set_value name="$targetsector" exact="$destination.{1}.sector" />
+				<create_position name="$position" space="$targetsector" value="$destination.{2}" object="$destination.{1}" />
+			</do_elseif>
+			<do_else>
+				<debug_to_file name="'BetterPiracy'" text="'This situation where a zone is not in a sector is unaccounted for. Destination Space: %1 (%2), Position: %3'.[$destination.{1}.knownname, $destination.{1}, $destination.{2}]" />
+				<return />
+			</do_else>
+		</do_elseif>
+		<do_else>
+			<debug_to_file name="'BetterPiracy'" text="'Input destination is not in a valid space. Destination Space: %1 (%2), Position: %3'.[$destination.{1}.knownname, $destination.{1}, $destination.{2}]" />
+			<return />
+		</do_else>
+		<do_if value="not $position?">
+			<set_value name="$position" exact="$destination.{2}" />
+		</do_if>
+
+		<debug_to_file name="'BetterPiracy'" text="'%s --- betterpiracy.order.fight.corsair --- %s (%s) initialized Corsair: $destination = %s, $radius = %s, $harass_s_ships = %s, $harass_m_ships = %s, $harass_combat_ships = %s, $harass_trader_ships = %s, $harass_miner_ships = %s.'.[player.age, this.assignedcontrolled.knownname, this.assignedcontrolled.idcode, $destination, $radius, $harass_s_ships, $harass_m_ships, $harass_combat_ships, $harass_trader_ships, $harass_miner_ships]" />
+	</init>
+	<attention min="unknown">
+		<actions>
+			<!-- Initial checks -->
+			<label name="start" />
+
+			<!-- If we are in a different zone, move to the target zone -->
+			<do_if value="(this.sector != $targetsector) or (this.ship.distanceto.[$targetsector, $position] gt $radius)">
+				<debug_to_file name="'BetterPiracy'" text="'%s --- betterpiracy.order.fight.corsair --- %s (%s) moving to target zone.'.[player.age, this.assignedcontrolled.knownname, this.assignedcontrolled.idcode]" />
+				<run_script name="'move.generic'">
+					<param name="destination" value="$targetsector" />
+					<param name="position" value="$position" />
+					<param name="endintargetzone" value="true" />
+					<param name="activepatrol" value="true" />
+					<param name="radius" value="$radius" />
+					<param name="radiusanchorpos" value="$position" />
+					<param name="radiusanchorspace" value="$targetsector" />
+				</run_script>
+			</do_if>
+
+			<!-- Obtain the $targetzone -->
+			<get_zone_at_position name="$targetzone" sector="$targetsector" value="$position" />
+			<do_if value="not $targetzone">
+				<!-- If there is still no zone at the position, the position is unobstructed and we are fairly close. Move straight there. -->
+				<move_to object="this.ship" destination="$targetsector" uselocalhighways="false" finishonapproach="true">
+					<position value="$position" />
+				</move_to>
+				<!-- At this point, we should be at the destination, so there should now be a zone. -->
+				<get_zone_at_position name="$targetzone" sector="$targetsector" value="$position" />
+				<do_if value="not $targetzone">
+					<debug_to_file name="'BetterPiracy'" text="'Error: %1 (%2) should be at the destination zone, but there still is no zone at the destination. present location: %3, %4, %5. destination: %6'.[this.ship.knownname, this.ship, this.ship.zone.knownname, this.ship.sector.knownname, this.ship.cluster.knownname, $destination]" />
+					<return />
+				</do_if>
+			</do_if>
+
+			<!-- Translate sector coordinates to zone coordinates. -->
+			<do_if value="$targetzone">
+				<!-- Input: $position relative to $targetsector. Output: $zoneposition relative to $targetzone. -->
+				<create_position name="$zoneposition" space="$targetzone" value="$position" object="$targetsector" />
+				<debug_to_file name="'BetterPiracy'" text="'%1 (%2) destination coordinates are now: %3 in %4 (%5), %6, %7'.[this.ship.knownname, this.ship, $zoneposition, $targetzone.knownname, $targetzone.macro, $targetzone.sector.knownname, $targetzone.cluster.knownname]" />
+			</do_if>
+
+			<!-- Generate target filters - targetclasses -->
+			<set_value name="$targetclasses" exact="[]" />
+			<do_if value="$harass_s_ships">
+				<append_to_list name="$targetclasses" exact="class.ship_s" />
+			</do_if>
+			<do_if value="$harass_m_ships">
+				<append_to_list name="$targetclasses" exact="class.ship_m" />
+			</do_if>
+
+			<!-- Generate target filters - targetpurposes -->
+			<set_value name="$targetpurposes" exact="[]" />
+			<do_if value="$harass_combat_ships">
+				<append_to_list name="$targetpurposes" exact="purpose.fight" />
+			</do_if>
+			<do_if value="$harass_trader_ships">
+				<append_to_list name="$targetpurposes" exact="purpose.trade" />
+			</do_if>
+			<do_if value="$harass_miner_ships">
+				<append_to_list name="$targetpurposes" exact="purpose.mine" />
+			</do_if>
+
+			<!-- Required for all infinite orders, no effect in case of finite timeout -->
+			<set_order_syncpoint_reached order="this.ship.order" />
+
+			<!-- Main loop -->
+			<do_while value="$targetzone.exists">
+				<!-- Initial random position in zone -->
+				<get_safe_pos result="$pos" zone="$targetzone" radius="this.ship.size/2f" max="$radius" value="$zoneposition" />
+				<debug_to_file name="'BetterPiracy'" text="'%s --- betterpiracy.order.fight.corsair --- %s (%s) searching targets.'.[player.age, this.assignedcontrolled.knownname, this.assignedcontrolled.idcode]" />
+
+				<move_to object="this.ship" destination="$targetzone" finishonapproach="false" uselocalhighways="false" forceposition="false" forcesteering="false" travel="true">
+					<!--<position value="$targetpos" object="$destination"/>-->
+					<position value="$pos" />
+					<interrupt>
+						<conditions>
+							<!-- Found enemy that matches the filters in gravidar-->
+							<check_all>
+								<event_gravidar_has_scanned object="this.ship" />
+								<check_value value="not this.zone.isclass.highway" />
+								<check_value value="this.sector" comment="should already be covered by condition above, but just to be safe." />
+								<count_gravidar_contacts result="$detected" class="class.ship" docked="false" object="this.ship" functional="true" capturable="true" min="1">
+									<match_context macro="this.sector.macro" />
+									<match class="$targetclasses" />
+									<match_distance object="this.ship" max="$radius" />
+									<match_relation_of faction="this.trueowner" comparison="lt" relation="neutral" />
+									<match trueowner="[this.trueowner, faction.ownerless]" negate="true" />
+								</count_gravidar_contacts>
+								<check_any exact="$detected.count" counter="$i">
+									<check_value value="$targetpurposes.indexof.{@$detected.{$i}.primarypurpose}" />
+								</check_any>
+							</check_all>
+						</conditions>
+						<actions>
+							<set_value name="$target" exact="$detected.{1}" />
+						</actions>
+					</interrupt>
+				</move_to>
+
+				<do_if value="@$target.isoperational and @$target.iscapturable">
+					<!-- Pass signal through player to reach the MD file "betterpiracy_harass.xml", listened in cue "Harass_OperationCreated" -->
+					<debug_to_file name="'BetterPiracy'" text="'%s --- betterpiracy.order.fight.corsair --- %s (%s) found a target: %s (%s).'.[player.age, this.assignedcontrolled.knownname, this.assignedcontrolled.idcode, $target.knownname, $target.knownname]" />
+					<signal_objects object="player.entity" param="'corsair_init_harass'" param2="this.ship" param3="$target" />
+					<remove_value name="$target"/>
+				</do_if>
+
+				<!-- Resupply check, just in case -->
+				<do_if value="player.age gt @$next_resupply_check" chance="30">
+					<debug_to_file name="'BetterPiracy'" text="'%1 (%2) ready to resupply.'.[this.ship.knownname, this.ship]" />
+					<signal_objects object="this.ship" param="'resupply'" param2="[false]" comment="param2 = [urgent?, resupplystationID]" />
+					<set_value name="$next_resupply_check" exact="player.age + 30min" />
+				</do_if>
+
+				<wait exact="500ms" />
+			</do_while>
+		</actions>
+	</attention>
+	<on_abort>
+		<cease_fire object="this.ship" />
+		<debug_to_file name="'BetterPiracy'" text="'%s --- betterpiracy.order.fight.corsair --- %s (%s) aborting Corsair.'.[player.age, this.assignedcontrolled.knownname, this.assignedcontrolled.idcode]" />
+	</on_abort>
+</aiscript>

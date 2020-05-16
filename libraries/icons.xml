@@ -2,4 +2,5 @@
 <!DOCTYPE icons SYSTEM "icons.dtd" >
 <icons>
     <icon name="order_harass" texture="assets\fx\gui\textures\order\order_board.tga" height="32" width="32"></icon>
+    <icon name="order_corsair" texture="assets\fx\gui\textures\order\order_board.tga" height="32" width="32"></icon>
 </icons>

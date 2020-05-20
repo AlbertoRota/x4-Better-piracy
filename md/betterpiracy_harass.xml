@@ -1,26 +1,27 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <mdscript name="Betterpiracy_harass" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://x4libonline.ddns.net/libraries/md.xsd">
 <cues>
-  <!-- TODO: Replace "attepmps" by "attemps". -->
-
-  <!-- Register the custom interaction menu entry. -->
-  <cue name="Reset_On_Reload" instantiate="true">
+  <!-- Add the custom interaction menu entry. -->
+  <cue name="Add_Interact_Actions" instantiate="true">
     <conditions>
-      <event_cue_signalled cue="md.Interact_Menu_API.Reloaded"/>
+      <event_cue_signalled cue="md.Interact_Menu_API.Get_Actions" />
     </conditions>
     <actions>
-      <signal_cue_instantly
-        cue="md.Interact_Menu_API.Register_Action"
-        param = "table[
-          $id         = 'betterpiracy_harass',
-          $section    = 'interaction',
-          $name       = {61537, 5100},
-          $callback   = Harass_OperationCreated,
-          $enabled_conditions  = ['class_ship'],
-          $disabled_conditions = ['~show_PlayerInteractions', '~is_playerowned'],
-          ]"
-      />
-      <debug_to_file name="'BetterPiracy'" text="'%s --- Betterpiracy_harass --- Registered custom `Harass` command as:  %s.'.[player.age, {61537, 5100}]" />
+      <set_value name="$target" exact="event.param.$object"/>
+      <do_if value="$target.isclass.ship and $target.pilot.exists and $target.isoperational and $target.iscapturable and not $target.isplayerowned and not $target.isunit and not $target.islasertower">
+        <debug_to_file name="'BetterPiracy'" text="'%s --- Betterpiracy_harass --- Added custom `Harass` interact action as:  %s.'.[player.age, {61537, 5050}]" />
+        <signal_cue_instantly
+          cue="md.Interact_Menu_API.Add_Action"
+          param = "table[
+            $id         = 'betterpiracy_harass',
+            $section    = 'interaction',
+            $text       = {61537, 5050},
+            $mouseover  = {61537, 5051},
+            $icon       = 'order_harass',
+            $mouseover_icon = 'order_harass',
+            $callback   = Harass_OperationCreated,
+            ]"/>
+      </do_if>
     </actions>
   </cue>
 
@@ -50,7 +51,7 @@
       <set_value name="$Config"       exact="md.Betterpiracy_config.Config.$Config"/>
       <set_value name="$CurrentPhase" exact="'Harass_OperationCreated'"/>
       <set_value name="$Pressure"     exact="0"/>
-      <set_value name="$BailAttepmps" exact="0"/>
+      <set_value name="$BailAttemps" exact="0"/>
 
       <do_if value="$Target.iscapitalship">
         <set_value name="$MaxDistance" exact="($Config.{'$keep_pressure_max_distance_lxl'})km"/>
@@ -112,16 +113,16 @@
       </library>
       <library name="Harass_CheckHull">
         <actions>
-          <do_if value="$BailAttepmps ge $Config.{'$harass_bail_attepmps_before_late'} and $Target.hullpercentage ge $Config.{'$late_harass_hull_threshold'}">
-            <debug_to_file name="'BetterPiracy'" text="'%s --- Betterpiracy_harass --- %s `Harass_CheckHull` library check failed, rolling back to damageHull phase: $Target.hullpercentage = %s, $BailAttepmps = %s, $Config.{`$harass_bail_attepmps_before_mid`} = %s, $Config.{`$harass_bail_attepmps_before_late`} = %s, $Config.{`$early_harass_hull_threshold`} = %s, $Config.{`$mid_harass_hull_threshold`} = %s, $Config.{`$late_harass_hull_threshold`} = %s'.[player.age, $MissionCue, $Target.hullpercentage, $BailAttepmps, $Config.{'$harass_bail_attepmps_before_mid'}, $Config.{'$harass_bail_attepmps_before_late'}, $Config.{'$early_harass_hull_threshold'}, $Config.{'$mid_harass_hull_threshold'}, $Config.{'$late_harass_hull_threshold'}]" />
+          <do_if value="$BailAttemps ge $Config.{'$harass_bail_attemps_before_late'} and $Target.hullpercentage ge $Config.{'$late_harass_hull_threshold'}">
+            <debug_to_file name="'BetterPiracy'" text="'%s --- Betterpiracy_harass --- %s `Harass_CheckHull` library check failed, rolling back to damageHull phase: $Target.hullpercentage = %s, $BailAttemps = %s, $Config.{`$harass_bail_attemps_before_mid`} = %s, $Config.{`$harass_bail_attemps_before_late`} = %s, $Config.{`$early_harass_hull_threshold`} = %s, $Config.{`$mid_harass_hull_threshold`} = %s, $Config.{`$late_harass_hull_threshold`} = %s'.[player.age, $MissionCue, $Target.hullpercentage, $BailAttemps, $Config.{'$harass_bail_attemps_before_mid'}, $Config.{'$harass_bail_attemps_before_late'}, $Config.{'$early_harass_hull_threshold'}, $Config.{'$mid_harass_hull_threshold'}, $Config.{'$late_harass_hull_threshold'}]" />
             <signal_cue_instantly cue="Harass_ChangePhase" param="'damageHull'"/>
           </do_if>
-          <do_elseif value="$BailAttepmps ge $Config.{'$harass_bail_attepmps_before_mid'} and $Target.hullpercentage ge $Config.{'$mid_harass_hull_threshold'}">
-            <debug_to_file name="'BetterPiracy'" text="'%s --- Betterpiracy_harass --- %s `Harass_CheckHull` library check failed, rolling back to damageHull phase: $Target.hullpercentage = %s, $BailAttepmps = %s, $Config.{`$harass_bail_attepmps_before_mid`} = %s, $Config.{`$harass_bail_attepmps_before_late`} = %s, $Config.{`$early_harass_hull_threshold`} = %s, $Config.{`$mid_harass_hull_threshold`} = %s, $Config.{`$late_harass_hull_threshold`} = %s'.[player.age, $MissionCue, $Target.hullpercentage, $BailAttepmps, $Config.{'$harass_bail_attepmps_before_mid'}, $Config.{'$harass_bail_attepmps_before_late'}, $Config.{'$early_harass_hull_threshold'}, $Config.{'$mid_harass_hull_threshold'}, $Config.{'$late_harass_hull_threshold'}]" />
+          <do_elseif value="$BailAttemps ge $Config.{'$harass_bail_attemps_before_mid'} and $Target.hullpercentage ge $Config.{'$mid_harass_hull_threshold'}">
+            <debug_to_file name="'BetterPiracy'" text="'%s --- Betterpiracy_harass --- %s `Harass_CheckHull` library check failed, rolling back to damageHull phase: $Target.hullpercentage = %s, $BailAttemps = %s, $Config.{`$harass_bail_attemps_before_mid`} = %s, $Config.{`$harass_bail_attemps_before_late`} = %s, $Config.{`$early_harass_hull_threshold`} = %s, $Config.{`$mid_harass_hull_threshold`} = %s, $Config.{`$late_harass_hull_threshold`} = %s'.[player.age, $MissionCue, $Target.hullpercentage, $BailAttemps, $Config.{'$harass_bail_attemps_before_mid'}, $Config.{'$harass_bail_attemps_before_late'}, $Config.{'$early_harass_hull_threshold'}, $Config.{'$mid_harass_hull_threshold'}, $Config.{'$late_harass_hull_threshold'}]" />
             <signal_cue_instantly cue="Harass_ChangePhase" param="'damageHull'"/>
           </do_elseif>
           <do_elseif value="$Target.hullpercentage ge $Config.{'$early_harass_hull_threshold'}">
-            <debug_to_file name="'BetterPiracy'" text="'%s --- Betterpiracy_harass --- %s `Harass_CheckHull` library check failed, rolling back to damageHull phase: $Target.hullpercentage = %s, $BailAttepmps = %s, $Config.{`$harass_bail_attepmps_before_mid`} = %s, $Config.{`$harass_bail_attepmps_before_late`} = %s, $Config.{`$early_harass_hull_threshold`} = %s, $Config.{`$mid_harass_hull_threshold`} = %s, $Config.{`$late_harass_hull_threshold`} = %s'.[player.age, $MissionCue, $Target.hullpercentage, $BailAttepmps, $Config.{'$harass_bail_attepmps_before_mid'}, $Config.{'$harass_bail_attepmps_before_late'}, $Config.{'$early_harass_hull_threshold'}, $Config.{'$mid_harass_hull_threshold'}, $Config.{'$late_harass_hull_threshold'}]" />
+            <debug_to_file name="'BetterPiracy'" text="'%s --- Betterpiracy_harass --- %s `Harass_CheckHull` library check failed, rolling back to damageHull phase: $Target.hullpercentage = %s, $BailAttemps = %s, $Config.{`$harass_bail_attemps_before_mid`} = %s, $Config.{`$harass_bail_attemps_before_late`} = %s, $Config.{`$early_harass_hull_threshold`} = %s, $Config.{`$mid_harass_hull_threshold`} = %s, $Config.{`$late_harass_hull_threshold`} = %s'.[player.age, $MissionCue, $Target.hullpercentage, $BailAttemps, $Config.{'$harass_bail_attemps_before_mid'}, $Config.{'$harass_bail_attemps_before_late'}, $Config.{'$early_harass_hull_threshold'}, $Config.{'$mid_harass_hull_threshold'}, $Config.{'$late_harass_hull_threshold'}]" />
             <signal_cue_instantly cue="Harass_ChangePhase" param="'damageHull'"/>
           </do_elseif>
         </actions>
@@ -282,10 +283,10 @@
               <include_actions ref="Harass_CheckTarget"/>
               <include_actions ref="Harass_CheckShields"/>
     
-              <do_if value="$BailAttepmps ge $Config.{'$harass_bail_attepmps_before_late'}">
+              <do_if value="$BailAttemps ge $Config.{'$harass_bail_attemps_before_late'}">
                 <set_value name="$MissedHullThreshold" exact="100 - $Config.{'$late_harass_hull_threshold'}"/>
               </do_if>
-              <do_elseif value="$BailAttepmps ge $Config.{'$harass_bail_attepmps_before_mid'}">
+              <do_elseif value="$BailAttemps ge $Config.{'$harass_bail_attemps_before_mid'}">
                 <set_value name="$MissedHullThreshold" exact="100 - $Config.{'$mid_harass_hull_threshold'}"/>
               </do_elseif>
               <do_else>
@@ -378,11 +379,11 @@
               <do_if value="$CurrentTimeLeft le 0">
                 <set_value name="$NextBailCheck" exact="player.age + ($Config.{'$keep_pressure_timer'})s"/>
                 <set_value name="$Pressure" operation="add"/>
-                <set_value name="$BailAttepmps" operation="add"/>
+                <set_value name="$BailAttemps" operation="add"/>
                 <do_if value="$HasMission">
                   <speak actor="player.computer" page="61538" line="[4401, 4402, 4403, 4404, 4405, 4406, 4407, 4408, 4409].random" priority="90"/>
                 </do_if>
-                <debug_to_file name="'BetterPiracy'" text="'%s --- Betterpiracy_harass --- %s --- `Harass_WaitForSurrender_Check` passed, triggering bail attemp: $NextBailCheck = %s, $Pressure = %s, $BailAttepmps = %s.'.[player.age, $MissionCue, $NextBailCheck, $Pressure, $BailAttepmps]" />
+                <debug_to_file name="'BetterPiracy'" text="'%s --- Betterpiracy_harass --- %s --- `Harass_WaitForSurrender_Check` passed, triggering bail attemp: $NextBailCheck = %s, $Pressure = %s, $BailAttemps = %s.'.[player.age, $MissionCue, $NextBailCheck, $Pressure, $BailAttemps]" />
                 <signal_cue_instantly cue="md.Betterpiracy_custom_bail_logic.PlayerOwnedShipHarass" param="$MissionCue"/>
               </do_if>
             </actions>

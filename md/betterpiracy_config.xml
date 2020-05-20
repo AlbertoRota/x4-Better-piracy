@@ -1,24 +1,10 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <mdscript name="Betterpiracy_config" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://x4libonline.ddns.net/libraries/md.xsd">
   <cues>
-    <!-- TODO: Replace "attepmps" by "attemps". -->
-
     <cue name="Config">
       <actions>
         <include_actions ref="Reset_Config"/>
       </actions>
-      <!-- TODO: Investigate reset
-      <cues>
-        <cue name="Reset_On_Lua_Reload" instantiate="true">
-          <conditions>
-            <event_cue_signalled cue="md.Simple_Menu_API.Reloaded"/>
-          </conditions>
-          <actions>
-            <include_actions ref="Reset_Config"/>
-          </actions>
-        </cue>
-      </cues>
-      -->
     </cue>
     <library name="Reset_Config">
       <actions>
@@ -27,9 +13,9 @@
           exact="table[
             $harass_shield_threshold = null,
             $early_harass_hull_threshold = null,
-            $harass_bail_attepmps_before_mid = null,
+            $harass_bail_attemps_before_mid = null,
             $mid_harass_hull_threshold = null,
-            $harass_bail_attepmps_before_late = null,
+            $harass_bail_attemps_before_late = null,
             $late_harass_hull_threshold = null,
             $keep_pressure_timer = null,
             $keep_pressure_max_distance_sm = null,
@@ -87,7 +73,7 @@
           cue = "md.Simple_Menu_Options.Register_Option"
           param = "table[
             $category   = {61537, 5150},  
-            $id         = '$harass_bail_attepmps_before_mid',
+            $id         = '$harass_bail_attemps_before_mid',
             $name       = {61537, 5155},
             $mouseover  = {61537, 5156},
             $type       = 'slidercell',
@@ -113,7 +99,7 @@
           cue = "md.Simple_Menu_Options.Register_Option"
           param = "table[
             $category   = {61537, 5150},  
-            $id         = '$harass_bail_attepmps_before_late',
+            $id         = '$harass_bail_attemps_before_late',
             $name       = {61537, 5159},
             $mouseover  = {61537, 5160},
             $type       = 'slidercell',
@@ -333,7 +319,7 @@
         <event_cue_signalled />
       </conditions>
       <actions>
-        <debug_to_file name="'BetterPiracy'" text="'%s --- Betterpiracy_config             --- Changing %s  from %s to %s.'.[player.age, event.param.$id, Config.$Config.{event.param.$id}, event.param.$value]" />        
+        <debug_to_file name="'BetterPiracy'" text="'%s --- Betterpiracy_config --- Changing %s from %s to %s.'.[player.age, event.param.$id, Config.$Config.{event.param.$id}, event.param.$value]" />        
         <set_value
           name="Config.$Config.{event.param.$id}"
           exact="event.param.$value"

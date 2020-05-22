@@ -67,27 +67,31 @@ Your allies will no longer protect your enemies from you!
  - https://text2voice.org, https://twistedwave.com/online, and https://voicechanger.io/ -> All of them used to create the custom dialog lines.
 
 ## Changelog
+### 0.12.0
+ - Updated to use the latest `SirNukes Mod Support APIs` features.
+ - Updated German texts. (Thank you @LeLeon)
+ - Ships that participate in a successful harass operation will gain experience.
 ### 0.11.0
- - Created new default order `Corsair`, ships/fleets with this behavior will smartly harass selected enemy targets
- - Improved Harass operation logic
- - Improved debug logging
- - Disabled `combat_reputation_hit` and `harass_reputation_hit`, I need to find a better way of handling it
- - Stations will not allow a fleeing ship to dock if the attacker is allied to them
- - Separated changes into `Major changes` and `Minor changes` to increase readability
+ - Created new default order `Corsair`, ships/fleets with this behavior will smartly harass selected enemy targets.
+ - Improved Harass operation logic.
+ - Improved debug logging.
+ - Disabled `combat_reputation_hit` and `harass_reputation_hit`, I need to find a better way of handling it.
+ - Stations will not allow a fleeing ship to dock if the attacker is allied to them.
+ - Separated changes into `Major changes` and `Minor changes` to increase readability.
 ### 0.10.0
- - Subordinates of the player ship will smartly participate in the "Harass operation"
+ - Subordinates of the player ship will smartly participate in the "Harass operation".
 ### 0.9.0
- - Improved logic to avoid having boarding pods orbiting ship when using marines to claim a ship
+ - Improved logic to avoid having boarding pods orbiting ship when using marines to claim a ship.
 ### 0.8.0
- - When using marines to claim a ship, the boarding pod will use the travel drive
- - Improved logic to avoid having boarding pods orbiting ship when using marines to claim a ship
+ - When using marines to claim a ship, the boarding pod will use the travel drive.
+ - Improved logic to avoid having boarding pods orbiting ship when using marines to claim a ship.
 ### 0.7.0
- - Removed boarding pods orbiting ship when using marines to claim a ship
- - Added German translation
- - Added French translation
+ - Removed boarding pods orbiting ship when using marines to claim a ship.
+ - Added German translation.
+ - Added French translation.
 ### 0.6.0
  - Added custom dialog lines during harass operation, now you know that you are threatening them.
- - Minor fixes
+ - Minor fixes.
 ### 0.5.0
  - Improved the `Harass` command vs capital ships, now it will only soften them.
  - Added distance checks to the `Harass` command, now you really need to stick on the target.
@@ -97,7 +101,7 @@ Your allies will no longer protect your enemies from you!
  - Externalized hard-coded texts to I18N files (English and Spanish).
 ### 0.3.0
  - Removed `Surrender!` dialog, replaced it by a more streamlined `RightClick -> Harass`.
- - Added dependency to "SirNukes Mod Support APIs"
+ - Added dependency to "SirNukes Mod Support APIs".
 ### 0.2.0
  - Forcing a pilot to bail out of their ship will negatively impact your relations with his/her faction.
 ### 0.1.0

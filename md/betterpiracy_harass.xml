@@ -399,6 +399,16 @@
           <set_value name="$CurrentPhase" exact="this"/>
           <debug_to_file name="'BetterPiracy'" text="'%s --- Betterpiracy_harass --- %s calling `Harass_Claim` cue.'.[player.age, $MissionCue]" />
           <signal_objects object="$Target" param="$MissionCue" param2="'harass__end'"/>
+          <!-- Give experience to involved ships -->
+          <do_if value="not $HasMission">
+            <apply_experience entity="$MainHarasser.pilot" experience="'BETTER_PIRACY_HARASS'" factor="1.0"/>
+            <apply_experience object="$MainHarasser" experience="'BETTER_PIRACY_HARASS'" role="entityrole.service" factor="1.0"/>
+          </do_if>
+          <do_all exact="$Harassers.count" counter="$i">
+            <apply_experience entity="$Harassers.{$i}.pilot" experience="'BETTER_PIRACY_HARASS'" factor="0.8"/>
+            <apply_experience object="$Harassers.{$i}" experience="'BETTER_PIRACY_HARASS'" role="entityrole.service" factor="0.8"/>
+          </do_all>
+          <!-- Move to the next phase or finish -->
           <do_if value="$HasMission">
             <do_if value="$Target.iscapitalship">
               <set_objective cue="$MissionCue" step="$MissionStep_ClaimShip" action="objective.board" text="{61537, 5110}" object="$Target" silent="true"/>

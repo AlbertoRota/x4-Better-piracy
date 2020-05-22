@@ -3,15 +3,15 @@
 <language id="49">
   <page id="61537" title="Better piracy texts" descr="0" voice="no">
     <!-- Harass order related texts -->
-    <t id="5050">Harass</t>
-    <t id="5051">Directly harass a target or support a harass operation.</t>
-    <t id="5052">Corsair</t>
-    <t id="5053">Command a pirate gang to harass ships in sector.</t>
-    <t id="5054">Target S sized ships: </t>
-    <t id="5055">Target M sized ships: </t>
-    <t id="5056">Target combat ships: </t>
-    <t id="5057">Target trader ships: </t>
-    <t id="5058">Target mining ships: </t>
+    <t id="5050">Schikanieren</t>
+    <t id="5051">Schikaniert ein Ziel direkt oder unterstützt eine Schikaneoperation</t>
+    <t id="5052">Kaperflotte</t>
+    <t id="5053">Bildet eine Kaperflotte, um Schiffe im Sektor zu schikanieren und zu übernehmen.</t>
+    <t id="5054">Kapere Schiffsgröße S </t>
+    <t id="5055">Kapere Schiffsgröße M</t>
+    <t id="5056">Kapere Kampfschiffe</t>
+    <t id="5057">Kapere Handelsschiffe</t>
+    <t id="5058">Kapere Schürferschiffe</t>
     <!-- Harass mission related texts -->
     <t id="5100">Schikanieren</t>
     <t id="5101">(Harass mission title)Gegnercrew schikanieren </t>

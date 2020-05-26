@@ -222,14 +222,18 @@
           </do_if>
           <do_else>
             <create_order id="'Harass'" object="$MainHarasser">
-              <param name="target" value="$Target"/>
+              <param name="target"          value="$Target"/>
               <param name="harassoperation" value="$MissionCue"/>
+            </create_order>
+            <create_order id="'Attack'" object="$Target" chance="($Target.pilot.skill.piloting * 100) / 15" immediate="true">
+              <param name="primarytarget"   value="$MainHarasser"/>
+              <param name="checkrelation"   value="false" />
             </create_order>
           </do_else>
 
           <do_all exact="$Harassers.count" counter="$i">
             <create_order id="'Harass'" object="$Harassers.{$i}">
-              <param name="target" value="$Target"/>
+              <param name="target"          value="$Target"/>
               <param name="harassoperation" value="$MissionCue"/>
             </create_order>
           </do_all>

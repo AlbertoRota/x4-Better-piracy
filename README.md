@@ -67,6 +67,9 @@ Your allies will no longer protect your enemies from you!
  - https://text2voice.org, https://twistedwave.com/online, and https://voicechanger.io/ -> All of them used to create the custom dialog lines.
 
 ## Changelog
+### 0.13.0
+ - Corsairs will taunt their target to force it to attack them, success dependant on Corsair piloting skill.
+ - Added Japanese texts. (Thank you @Arkblade JP)
 ### 0.12.0
  - Updated to use the latest `SirNukes Mod Support APIs` features.
  - Updated German texts. (Thank you @LeLeon)

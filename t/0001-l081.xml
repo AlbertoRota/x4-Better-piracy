@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- General language file: applies to all which does not have their own language files -->
+<language>
+  <page id="61537" title="Better piracy texts" descr="0" voice="no">
+    <!-- Harass order related texts -->
+    <t id="5050">脅迫</t>
+    <t id="5051">直接ターゲットを脅す、もしくは既存の脅迫行為に加担します。</t>
+    <t id="5052">海賊行為</t>
+    <t id="5053">宙域の船に対しての脅迫行為を指示します。</t>
+    <t id="5054">小型船を標的にする: </t>
+    <t id="5055">中型船を標的にする: </t>
+    <t id="5056">戦闘用艦船を標的にする: </t>
+    <t id="5057">交易用艦船を標的にする: </t>
+    <t id="5058">採掘用艦船を標的にする: </t>
+    <!-- Harass mission related texts -->
+    <t id="5100">脅迫</t>
+    <t id="5101">(Harass mission title)脅迫行為 </t>
+    <t id="5102">(Harass mission description)脅迫行為に加担する。 </t>
+    <t id="5103">(Increase pressure objective)重圧を高める </t>
+    <t id="5104">(Maintain pressure objective)重圧を維持する </t>
+    <t id="5105">(Damage shields)標的のシールドをダウンさせる </t>
+    <t id="5106">(Damage hull)標的の船体に損傷を与える </t>
+    <t id="5107">(Approach)標的に接近する </t>
+    <t id="5108">(Keep pressing)標的を撃墜しないように！ </t>
+    <t id="5109">(Claim)放棄された船 </t>
+    <t id="5110">(Board)移乗作戦を開始する </t>
+    <!-- Config related texts -->
+	<t id="5150">(Menu category)Better piracy</t>
+	<t id="5151">(Harass shield threshold name)脅迫時シールドしきい値</t>
+	<t id="5152">(Harass shield threshold mouseover)脅迫行為中にシールドの割合が指定値以上になった場合、進行度合いが「標的のシールドをダウンさせる」に戻ります。\n\nまた、この値を10%以上下回ると「標的のシールドをダウンさせる」段階は終了します。</t>
+	<t id="5153">(Early harass hull threshold name)初期脅迫しきい値</t>
+	<t id="5154">(Early harass hull threshold mouseover)初期脅迫行為に必要な相手の船体損傷度合い。この値を超えると、進行度合いが「標的の船体に損傷を与える」に戻ります。</t>
+	<t id="5155">(Harass bail attemps before mid name)中期移行までの船投棄チェック数</t>
+	<t id="5156">(Harass bail attemps before mid mouseover)船投棄チェックがこの回数分行われた場合、さらなる脅迫の継続には「中期脅迫しきい値」まで標的艦船を損傷させる必要があります。</t>
+	<t id="5157">(Mid harass hull threshold name)中期脅迫しきい値</t>
+	<t id="5158">(Mid harass hull threshold mouseover)中期脅迫行為に必要な相手の船体損傷度合い。この値を超えると、進行度合いが「標的の船体に損傷を与える」に戻ります。</t>
+	<t id="5159">(Harass bail attemps before late name)後期移行までの船投棄チェック数</t>
+	<t id="5160">(Harass bail attemps before late mouseover)船投棄チェックがこの回数分行われた場合、さらなる脅迫の継続には「後期脅迫しきい値」まで標的艦船を損傷させる必要があります。</t>
+	<t id="5161">(Late harass hull threshold name)後期脅迫しきい値</t>
+	<t id="5162">(Late harass hull threshold mouseover)後期脅迫行為に必要な相手の船体損傷度合い。この値を超えると、進行度合いが「標的の船体に損傷を与える」に戻ります。</t>
+	<t id="5163">(Keep pressure timer name)重圧維持タイマー</t>
+	<t id="5164">(Keep pressure timer mouseover)脅迫行為中、毎回の重圧維持チェックに要する時間です。\n\n各チェック後に、操縦士には重圧ポイントが加算され、船の投棄判定も行われます。</t>
+	<t id="5165">(Keep pressure max distance - S/M name)重圧維持可能な最大距離 - 小型/中型</t>
+	<t id="5166">(Keep pressure max distance - S/M mouseover)小型/中型艦船への脅迫行為中、重圧を与え続けるために必要な最大距離です。\n\nこれ以上離れた場合、進行度合いが「標的に接近する」に戻ります。</t>
+	<t id="5167">(Keep pressure max distance - L/XL name)重圧維持可能な最大距離 - 大型/特大型</t>
+	<t id="5168">(Keep pressure max distance - L/XL mouseover)大型/特大型艦船への脅迫行為中、重圧を与え続けるために必要な最大距離です。\n\nこれ以上離れた場合、進行度合いが「標的に接近する」に戻ります。</t>
+	<t id="5169">(Pressure build-up rate name)重圧の上昇度合い</t>
+	<t id="5170">(Pressure build-up rate mouseover)各重圧ポイントが操縦士の士気にどの程度の影響を与えるかを表します。\n\n重圧ポイントは重圧維持チェックのたびに加算されていきます。</t>
+	<t id="5171">(Harass L/XL min crew left - Base name)大型/特大型脅迫時の最低乗組員数 - 基礎値</t>
+	<t id="5172">(Harass L/XL min crew left - Base mouseover)大型/特大型艦船への脅迫行為中、乗組員の割合がこの数を下回った場合、段階が「移乗作戦を開始する」に移行します。</t>
+	<t id="5173">(Harass L/XL min crew left - Pilot name)大型/特大型脅迫時の最低乗組員数 - 艦長ボーナス</t>
+	<t id="5174">(Harass L/XL min crew left - Pilot mouseover)大型/特大型脅迫時の最低乗組員数の割合に、どの程度操縦士の士気が影響するかの値です。星5では数値の100%、星0ではボーナスなしとなります。\n\n重圧ポイントはこのボーナスに影響しません。</t>
+	<t id="5175">(Harass base bail chance name)脅迫行為の基本成功率</t>
+	<t id="5176">(Harass base bail chance mouseover)最良のケースにおいて、脅迫による船の投棄が行われる確率です。\n\n実際には操縦士の士気など、いくつかの要因によってこの値は減少します。</t>
+	<t id="5177">(Harass base bail number name)船投棄人数の基礎値</t>
+	<t id="5178">(Harass base bail number mouseover)最良のケースにおいて、脅迫による船の投棄が行われた際、乗組員のどの程度の割合が船を捨てるかの値です。\n\n実際には操縦士の士気など、いくつかの要因によってこの値は減少します。</t>
+	<t id="5179">(Harass reputation hit name)脅迫行為成功時の関係値低下</t>
+	<t id="5180">(Harass reputation hit mouseover)有効な場合、脅迫行為が完了した際に、操縦士の所属派閥との関係値が低下します。\n\n関係値低下のロジックは大型/特大型艦船への移乗作戦の実行時と同じです。</t>
+	<t id="5181">(Harass bailing pilots damage hull name)脅迫での操縦士の船投棄時の船体損傷</t>
+	<t id="5182">(Harass bailing pilots damage hull mouseover)有効な場合、脅迫行為で操縦士が船を投棄した際に、船体へと損傷を与えていきます。\n\n与えられる損傷の大きさは操縦士の士気に比例します。</t>
+	<t id="5183">(Harass bailing pilots destroy components name)脅迫での操縦士の船投棄時の設備破壊</t>
+	<t id="5184">(Harass bailing pilots destroy components mouseover)有効な場合、脅迫行為で操縦士が船を投棄した際に、船の設備をいくつか破壊していきます。\n\n破壊される設備の数は操縦士の士気に比例しますが、シールドは破壊対象になりません。</t>
+	<t id="5185">(Combat base bail chance name)戦闘時船投棄確率</t>
+	<t id="5186">(Combat base bail chance mouseover)最良のケースにおいて、戦闘時に船の投棄が行われる確率です。\n\n実際には操縦士の士気など、いくつかの要因によってこの値は減少します。</t>
+	<t id="5187">(Combat reputation hit name)戦闘での船投棄時の関係値低下</t>
+	<t id="5188">(Combat reputation hit mouseover)有効な場合、操縦士が船を投棄するまで攻撃を続けた際に、操縦士の所属派閥との関係値が低下します。\n\n関係値低下のロジックは大型/特大型艦船への移乗作戦の実行時と同じです。</t>
+	<t id="5189">(Combat bailing pilots damage hull name)操縦士の戦闘での船投棄時の追加船体損傷</t>
+	<t id="5190">(Combat bailing pilots damage hull mouseover)有効な場合、操縦士が船を投棄するまで攻撃を続けた際に、船体へと損傷を与えていきます。\n\n与えられる損傷の大きさは操縦士の士気に比例します。</t>
+	<t id="5191">(Combat bailing pilots destroy components name)操縦士の戦闘での船投棄時の追加設備破壊</t>
+	<t id="5192">(Combat bailing pilots destroy components mouseover)有効な場合、操縦士が船を投棄するまで攻撃を続けた際に、船の設備をいくつか破壊していきます。\n\n破壊される設備の数は操縦士の士気に比例します。</t>
+	</page>																								
+	<!-- Threatening lines -->
+  <page id="61538" title="Better piracy voices" descr="0" voice="yes">
+    <t id="4401">決着は付いた すぐに船を放棄しろ！</t>
+    <t id="4402">我々の興味があるのは船だけだ　手間を取らせるな すぐに降伏しろ！</t>
+    <t id="4403">選択肢は２つしかない 降伏するか 死ぬ準備をするかだ！</t>
+    <t id="4404">これからその船に殴り込みをかけるつもりだ　その時に船に居たくはないだろう？</t>
+    <t id="4405">もうチャンスはない 冷静になって降伏しろ</t>
+    <t id="4406">本当に死にたいのか？　違うなら船を捨てていけ！</t>
+    <t id="4407">お前はその船とともに在ることはできないが 船を生きて出ることはできる</t>
+    <t id="4408">すでに勇気は見せてもらった 今度は知恵を使って降伏する番だ！</t>
+    <t id="4409">その頑固さがお前を殺すことになる　今すぐ降伏しろ！</t>
+  </page>
+</language>

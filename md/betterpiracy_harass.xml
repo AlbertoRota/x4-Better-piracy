@@ -225,7 +225,7 @@
               <param name="target"          value="$Target"/>
               <param name="harassoperation" value="$MissionCue"/>
             </create_order>
-            <create_order id="'Attack'" object="$Target" chance="($Target.pilot.skill.piloting * 100) / 15" immediate="true">
+            <create_order id="'Attack'" object="$Target" chance="($MainHarasser.pilot.skill.piloting * 100) / 15" immediate="true">
               <param name="primarytarget"   value="$MainHarasser"/>
               <param name="checkrelation"   value="false" />
             </create_order>
